@@ -61,7 +61,7 @@ function createFiltersTemplate() {
   </form>`;
 }
 
-export default class Filters {
+export default class FiltersView {
   getTemplate() {
     return createFiltersTemplate();
   }
