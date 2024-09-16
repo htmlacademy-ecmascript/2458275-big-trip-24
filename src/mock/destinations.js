@@ -145,4 +145,6 @@ const mockDestinations = [
       }
     ]
   }
-]
+];
+
+export {mockDestinations};

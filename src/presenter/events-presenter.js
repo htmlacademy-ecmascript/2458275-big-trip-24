@@ -23,7 +23,12 @@ export default class EventsPresenter {
     render(new EventEditView(), this.eventsListComponent.getElement());
 
     for (let i = 0; i < this.eventsPoints.length; i++) {
-      render(new EventView(this.eventsPoints[i]), this.eventsListComponent.getElement());
+      const point = new EventView({
+        point: this.eventsPoints[i],
+        offers: [...this.pointsModel.getOffersById(this.eventsPoints[i].type, this.eventsPoints[i].offers)],
+        destination: this.pointsModel.getDestinationById(this.eventsPoints[i].destination)
+      });
+      render(point, this.eventsListComponent.getElement());
     }
   }
 }
