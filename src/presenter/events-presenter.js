@@ -24,9 +24,9 @@ export default class EventsPresenter {
 
     for (let i = 0; i < this.eventsPoints.length; i++) {
       const point = new EventView({
-        point: this.eventsPoints[i],
-        offers: [...this.pointsModel.getOffersById(this.eventsPoints[i].type, this.eventsPoints[i].offers)],
-        destination: this.pointsModel.getDestinationById(this.eventsPoints[i].destination)
+        event: this.eventsPoints[i],
+
+
       });
       render(point, this.eventsListComponent.getElement());
     }
