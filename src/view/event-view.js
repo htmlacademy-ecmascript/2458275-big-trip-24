@@ -1,4 +1,5 @@
 import {createElement} from '../render.js';
+import TIME_FORMAT from './consts.js';
 
 function createEventTemplate() {
   return `<li class="trip-events__item">
