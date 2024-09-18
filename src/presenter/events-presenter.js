@@ -33,8 +33,14 @@ export default class EventsPresenter {
     });
     render(eventEditing, this.eventsListComponent.getElement());
 
-
-    render(new EventAddView(), this.eventsListComponent.getElement());
+    const eventAdding = new EventAddView({
+      event: this.eventsPoints[this.eventsPoints.length - 1],
+      chosenDestination: this.destinationsModel.getDestinationsById(this.eventsPoints[0].destination),
+      chosenOffers: [...this.offersModel.getOffersById(this.eventsPoints[this.eventsPoints.length - 1].type, this.eventsPoints[this.eventsPoints.length - 1].offers)],
+      allDestinations: this.destinationsModel.getDestinations(),
+      allOffers: this.offersModel.getOffersByType(this.eventsPoints[this.eventsPoints.length - 1].type),
+    });
+    render(eventAdding, this.eventsListComponent.getElement());
 
     for (let i = 0; i < this.eventsPoints.length; i++) {
       const point = new EventPointView({
