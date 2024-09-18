@@ -13,12 +13,14 @@ const filtersPresenter = new FiltersPresenter({
 });
 
 const pointsModel = new PointsModel();
+const destinationsModel = new DestinationsModel();
+const offersModel = new OffersModel();
+
 const eventsPresenter = new EventsPresenter({
   eventsContainer: tripEventsElement,
   pointsModel,
-  DestinationsModel,
-  OffersModel,
-
+  destinationsModel,
+  offersModel,
 });
 
 filtersPresenter.init();
