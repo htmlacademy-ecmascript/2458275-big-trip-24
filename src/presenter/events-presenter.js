@@ -2,6 +2,7 @@ import SortView from '../view/sort-view.js';
 import EventsListView from '../view/events-list-view.js';
 import EventEditView from '../view/event-edit-view.js';
 import EventPointView from '../view/event-point-view.js';
+import EventAddView from '../view/event-add-view.js';
 
 
 import { render, RenderPosition } from '../render.js';
@@ -22,7 +23,18 @@ export default class EventsPresenter {
     render(new SortView(), this.eventsContainer, RenderPosition.BEFOREEND);
     render(this.eventsListComponent, this.eventsContainer, RenderPosition.BEFOREEND);
 
-    render(new EventEditView(), this.eventsListComponent.getElement());
+
+    const eventEditing = new EventEditView({
+      event: this.eventsPoints[0],
+      chosenDestination: this.destinationsModel.getDestinationsById(this.eventsPoints[0].destination),
+      chosenOffers: [...this.offersModel.getOffersById(this.eventsPoints[0].type, this.eventsPoints[0].offers)],
+      allDestinations: this.destinationsModel.getDestinations(),
+      allOffers: this.offersModel.getOffersByType(this.eventsPoints[0].type),
+    });
+    render(eventEditing, this.eventsListComponent.getElement());
+
+
+    render(new EventAddView(), this.eventsListComponent.getElement());
 
     for (let i = 0; i < this.eventsPoints.length; i++) {
       const point = new EventPointView({

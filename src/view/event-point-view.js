@@ -7,7 +7,7 @@ function createEventTemplate(event, destination, offers) {
 
   return `<li class="trip-events__item">
   <div class="event">
-      <time class="event__date" datetime="${dateFrom}">${humanizeEventDate(dateFrom, TIME_FORMAT.eventDate)}</time>
+      <time class="event__date" datetime="${humanizeEventDate(dateFrom, TIME_FORMAT.fullEventDate)}">${humanizeEventDate(dateFrom, TIME_FORMAT.eventDate)}</time>
                 <div class="event__type">
                   <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
                 </div>
