@@ -2,7 +2,7 @@ import SortView from '../view/sort-view.js';
 import EventsListView from '../view/events-list-view.js';
 import EventEditView from '../view/event-edit-view.js';
 import EventPointView from '../view/event-point-view.js';
-import EventAddView from '../view/event-add-view.js';
+import {isEscapeKey} from '../utils.js';
 
 
 import {render, replace,} from '../framework/render.js';
@@ -30,35 +30,51 @@ export default class EventsPresenter {
     render(new SortView(), this.#eventsContainer);
     render(this.#eventsListComponent, this.#eventsContainer);
 
-    /*const eventEditing = new EventEditView({
-      event: this.#eventsPoints[0],
-      chosenDestination: this.#destinationsModel.getDestinationsById(this.#eventsPoints[0].destination),
-      chosenOffers: [...this.#offersModel.getOffersById(this.#eventsPoints[0].type, this.#eventsPoints[0].offers)],
-      allDestinations: this.#destinationsModel.getDestinations(),
-      allOffers: this.#offersModel.getOffersByType(this.#eventsPoints[0].type),
+    this.#eventsPoints.forEach((point) => {
+      this.#renderEventPoint(point);
     });
-    render(eventEditing, this.#eventsListComponent.element);
-
-    const eventAdding = new EventAddView({
-      event: this.#eventsPoints[this.#eventsPoints.length - 1],
-      chosenDestination: this.#destinationsModel.getDestinationsById(this.#eventsPoints[0].destination),
-      chosenOffers: [...this.#offersModel.getOffersById(this.#eventsPoints[this.#eventsPoints.length - 1].type, this.#eventsPoints[this.#eventsPoints.length - 1].offers)],
-      allDestinations: this.#destinationsModel.getDestinations(),
-      allOffers: this.#offersModel.getOffersByType(this.#eventsPoints[this.#eventsPoints.length - 1].type),
-    });
-    render(eventAdding, this.#eventsListComponent.element); */
-
-    for (let i = 0; i < this.#eventsPoints.length; i++) {
-      const eventPointComponent = new EventPointView({
-        event: this.#eventsPoints[i],
-        destination: this.#destinationsModel.getDestinationsById(this.#eventsPoints[i].destination),
-        offers: [...this.#offersModel.getOffersById(this.#eventsPoints[i].type, this.#eventsPoints[i].offers)],
-      });
-      this.#renderEventPoint(eventPointComponent);
-    }
   }
 
   #renderEventPoint(point) {
-    render(point, this.#eventsListComponent.element);
+    const escKeyDownHandler = (evt) => {
+      if (isEscapeKey) {
+        evt.preventDefault();
+        replaceEditFormToPoint();
+        document.removeEventListener('keydown', escKeyDownHandler);
+      }
+    };
+    const onEditOpenButtonClick = () => {
+      replacePointToEditForm();
+      document.addEventListener('keydown', escKeyDownHandler);
+    };
+    const onEditCloseButtonClick = () => {
+      replaceEditFormToPoint();
+      document.removeEventListener('keydown', escKeyDownHandler);
+    };
+
+    const eventPointComponent = new EventPointView ({
+      point,
+      destination: this.#destinationsModel.getDestinationsById(point.destination),
+      offers: [...this.#offersModel.getOffersById(point.type, point.offers)],
+      onEditOpenButtonClick,
+    });
+
+    const eventPointEditingComponent = new EventEditView ({
+      point,
+      chosenDestination: this.#destinationsModel.getDestinationsById(point.destination),
+      chosenOffers: [...this.#offersModel.getOffersById(point.type, point.offers)],
+      allDestinations: this.#destinationsModel.getDestinations(),
+      allOffers: this.#offersModel.getOffersByType(point.type),
+      onEditCloseButtonClick,
+    });
+
+    function replaceEditFormToPoint() {
+      replace(eventPointComponent, eventPointEditingComponent);
+    }
+    function replacePointToEditForm() {
+      replace(eventPointEditingComponent, eventPointComponent);
+    }
+
+    render(eventPointComponent, this.#eventsListComponent.element);
   }
 }

@@ -77,23 +77,31 @@ function createEventEditingTemplate(event, chosenDestination, chosenOffers, allD
 }
 
 export default class EventEditView extends AbstractView {
-  #event = null;
+  #point = null;
   #chosenDestination = null;
   #chosenOffers = null;
   #allDestinations = null;
   #allOffers = null;
+  #handleEditCloseButton = null;
 
-  constructor({event, chosenDestination, chosenOffers, allDestinations, allOffers}) {
+  constructor({point, chosenDestination, chosenOffers, allDestinations, allOffers, onEditCloseButtonClick}) {
     super();
-    this.#event = event;
+    this.#point = point;
     this.#chosenDestination = chosenDestination;
     this.#chosenOffers = chosenOffers;
     this.#allDestinations = allDestinations;
     this.#allOffers = allOffers;
+    this.#handleEditCloseButton = onEditCloseButtonClick;
+
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editCloseButtonHandler);
   }
 
   get template() {
-    return createEventEditingTemplate(this.#event, this.#chosenDestination, this.#chosenOffers, this.#allDestinations, this.#allOffers);
+    return createEventEditingTemplate(this.#point, this.#chosenDestination, this.#chosenOffers, this.#allDestinations, this.#allOffers);
   }
 
+  #editCloseButtonHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleEditCloseButton();
+  };
 }
