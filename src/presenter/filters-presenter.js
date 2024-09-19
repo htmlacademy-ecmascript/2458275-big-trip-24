@@ -1,6 +1,6 @@
 import FiltersView from '../view/filtes-view.js';
 
-import { render, RenderPosition } from '../render.js';
+import { render } from '../framework/render.js';
 
 export default class FiltersPresenter {
   filtersComponent = new FiltersView();
@@ -10,6 +10,6 @@ export default class FiltersPresenter {
   }
 
   init() {
-    render(this.filtersComponent, this.filtersContainer, RenderPosition.BEFOREEND);
+    render(this.filtersComponent, this.filtersContainer);
   }
 }

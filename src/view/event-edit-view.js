@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import {TIME_FORMAT, EVENT_TYPES} from '../consts.js';
 import {createOffersTemplate, createTypeTemplate} from './service.js';
 import {humanizeEventDate} from '../utils.js';
@@ -76,28 +76,24 @@ function createEventEditingTemplate(event, chosenDestination, chosenOffers, allD
               </form>`;
 }
 
-export default class EventEditView {
+export default class EventEditView extends AbstractView {
+  #event = null;
+  #chosenDestination = null;
+  #chosenOffers = null;
+  #allDestinations = null;
+  #allOffers = null;
+
   constructor({event, chosenDestination, chosenOffers, allDestinations, allOffers}) {
-    this.event = event;
-    this.chosenDestination = chosenDestination;
-    this.chosenOffers = chosenOffers;
-    this.allDestinations = allDestinations;
-    this.allOffers = allOffers;
+    super();
+    this.#event = event;
+    this.#chosenDestination = chosenDestination;
+    this.#chosenOffers = chosenOffers;
+    this.#allDestinations = allDestinations;
+    this.#allOffers = allOffers;
   }
 
-  getTemplate() {
-    return createEventEditingTemplate(this.event, this.chosenDestination, this.chosenOffers, this.allDestinations, this.allOffers);
+  get template() {
+    return createEventEditingTemplate(this.#event, this.#chosenDestination, this.#chosenOffers, this.#allDestinations, this.#allOffers);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
 }
