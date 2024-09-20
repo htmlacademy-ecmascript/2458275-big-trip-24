@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import {TIME_FORMAT, EVENT_TYPES} from '../consts.js';
 import {createOffersTemplate, createTypeTemplate} from './service.js';
 import {humanizeEventDate} from '../utils.js';
@@ -76,28 +76,32 @@ function createEventEditingTemplate(event, chosenDestination, chosenOffers, allD
               </form>`;
 }
 
-export default class EventEditView {
-  constructor({event, chosenDestination, chosenOffers, allDestinations, allOffers}) {
-    this.event = event;
-    this.chosenDestination = chosenDestination;
-    this.chosenOffers = chosenOffers;
-    this.allDestinations = allDestinations;
-    this.allOffers = allOffers;
+export default class EventEditView extends AbstractView {
+  #point = null;
+  #chosenDestination = null;
+  #chosenOffers = null;
+  #allDestinations = null;
+  #allOffers = null;
+  #handleEditCloseButton = null;
+
+  constructor({point, chosenDestination, chosenOffers, allDestinations, allOffers, onEditCloseButtonClick}) {
+    super();
+    this.#point = point;
+    this.#chosenDestination = chosenDestination;
+    this.#chosenOffers = chosenOffers;
+    this.#allDestinations = allDestinations;
+    this.#allOffers = allOffers;
+    this.#handleEditCloseButton = onEditCloseButtonClick;
+
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editCloseButtonHandler);
   }
 
-  getTemplate() {
-    return createEventEditingTemplate(this.event, this.chosenDestination, this.chosenOffers, this.allDestinations, this.allOffers);
+  get template() {
+    return createEventEditingTemplate(this.#point, this.#chosenDestination, this.#chosenOffers, this.#allDestinations, this.#allOffers);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+  #editCloseButtonHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleEditCloseButton();
+  };
 }

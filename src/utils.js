@@ -5,6 +5,8 @@ const getRandomArrayElement = (items) => items[Math.floor(Math.random() * items.
 
 const capitalize = (word) => word.charAt(0).toUpperCase() + word.slice(1);
 
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
 function humanizeEventDate(eventDate, format) {
   return dayjs(eventDate).format(format);
 }
@@ -26,4 +28,4 @@ function padToTwoDigits(number) {
   return number.toString().padStart(2, '0');
 }
 
-export {getRandomArrayElement, humanizeEventDate, getEventDuration, capitalize};
+export {getRandomArrayElement, humanizeEventDate, getEventDuration, capitalize, isEscapeKey};
