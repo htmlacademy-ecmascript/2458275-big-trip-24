@@ -1,4 +1,6 @@
-import {capitalize} from '../utils.js';
+import dayjs from 'dayjs';
+import {HOURS, MINUTES} from '../consts.js';
+import {capitalize, padToTwoDigits} from '../utils/utils.js';
 
 function createOffersTemplate(offers, currentOffers, type) {
   return offers.map((offer) => `<div class="event__offer-selector">
@@ -18,4 +20,20 @@ function createTypeTemplate (allTypes, chosenType, type) {
   </div>`).join('');
 }
 
-export {createOffersTemplate, createTypeTemplate};
+function humanizeEventDate(eventDate, format) {
+  return dayjs(eventDate).format(format);
+}
+
+function getEventDuration (eventStart, eventEnd) {
+  const eventDurationDays = dayjs(eventEnd).diff(eventStart, 'day');
+  const eventDurationHours = dayjs(eventEnd).diff(eventStart, 'hour');
+  const eventDurationMinutes = dayjs(eventEnd).diff(eventStart, 'minute');
+
+  const days = eventDurationDays > 0 ? Math.floor(eventDurationDays) : '';
+  const hours = eventDurationHours > HOURS ? Math.floor(eventDurationHours - (eventDurationDays * HOURS)) : '';
+  const minutes = eventDurationMinutes > MINUTES ? eventDurationMinutes % MINUTES : '';
+
+  const formattedEventDuration = `${padToTwoDigits(days)}D ${padToTwoDigits(hours)}H ${padToTwoDigits(minutes)}M`;
+  return formattedEventDuration;
+}
+export {createOffersTemplate, createTypeTemplate, humanizeEventDate, getEventDuration};

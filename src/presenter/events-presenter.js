@@ -3,7 +3,7 @@ import EventsListView from '../view/events-list-view.js';
 import EventEditView from '../view/event-edit-view.js';
 import EventPointView from '../view/event-point-view.js';
 import NoEventView from '../view/no-event-view.js';
-import {isEscapeKey} from '../utils.js';
+import {isEscapeKey} from '../utils/utils.js';
 
 
 import {render, replace,} from '../framework/render.js';
