@@ -25,15 +25,26 @@ function humanizeEventDate(eventDate, format) {
 }
 
 function getEventDuration (eventStart, eventEnd) {
-  const eventDurationDays = dayjs(eventEnd).diff(eventStart, 'day');
-  const eventDurationHours = dayjs(eventEnd).diff(eventStart, 'hour');
   const eventDurationMinutes = dayjs(eventEnd).diff(eventStart, 'minute');
 
-  const days = eventDurationDays > 0 ? Math.floor(eventDurationDays) : '';
-  const hours = eventDurationHours > HOURS ? Math.floor(eventDurationHours - (eventDurationDays * HOURS)) : '';
-  const minutes = eventDurationMinutes > MINUTES ? eventDurationMinutes % MINUTES : '';
+  const days = eventDurationMinutes > (MINUTES * HOURS) ? Math.floor(eventDurationMinutes / (MINUTES * HOURS)) : '';
+  const hours = eventDurationMinutes > MINUTES ? Math.floor(eventDurationMinutes / MINUTES) : '';
+  const minutes = eventDurationMinutes - hours * MINUTES;
 
-  const formattedEventDuration = `${padToTwoDigits(days)}D ${padToTwoDigits(hours)}H ${padToTwoDigits(minutes)}M`;
+  const formattedEventDuration = eventDurationMinutes < MINUTES ? `${padToTwoDigits(eventDurationMinutes)}M` : `${padToTwoDigits(days)}D ${padToTwoDigits(hours)}H ${padToTwoDigits(minutes)}M`;
   return formattedEventDuration;
 }
-export {createOffersTemplate, createTypeTemplate, humanizeEventDate, getEventDuration};
+
+function isFuturePoint () {
+
+}
+
+function isPresentPoint () {
+
+}
+
+function isPastPoint () {
+
+}
+
+export {createOffersTemplate, createTypeTemplate, humanizeEventDate, getEventDuration, isFuturePoint, isPresentPoint, isPastPoint};
