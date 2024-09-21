@@ -35,16 +35,16 @@ function getEventDuration (eventStart, eventEnd) {
   return formattedEventDuration;
 }
 
-function isFuturePoint () {
-
+function isFuturePoint (dateFrom) {
+  return dayjs().isBefore(dateFrom, 'D');
 }
 
-function isPresentPoint () {
-
+function isPresentPoint (dateFrom, dateTo) {
+  return dayjs().isSame(dateFrom, 'D') || dayjs().isSame(dateTo, 'D') || (dayjs().isAfter(dateFrom, 'D') && dayjs().isBefore(dateTo, 'D'));
 }
 
-function isPastPoint () {
-
+function isPastPoint (dateTo) {
+  return dayjs().isAfter(dateTo, 'D');
 }
 
 export {createOffersTemplate, createTypeTemplate, humanizeEventDate, getEventDuration, isFuturePoint, isPresentPoint, isPastPoint};
