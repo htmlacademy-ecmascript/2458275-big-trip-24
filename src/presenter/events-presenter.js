@@ -2,7 +2,8 @@ import SortView from '../view/sort-view.js';
 import EventsListView from '../view/events-list-view.js';
 import EventEditView from '../view/event-edit-view.js';
 import EventPointView from '../view/event-point-view.js';
-import {isEscapeKey} from '../utils.js';
+import NoEventView from '../view/no-event-view.js';
+import {isEscapeKey} from '../utils/utils.js';
 
 
 import {render, replace,} from '../framework/render.js';
@@ -27,6 +28,10 @@ export default class EventsPresenter {
   init() {
     this.#eventsPoints = [...this.#pointsModel.getPoints()];
 
+    if (this.#eventsPoints.length === 0) {
+      render(new NoEventView(), this.#eventsContainer);
+      return;
+    }
     render(new SortView(), this.#eventsContainer);
     render(this.#eventsListComponent, this.#eventsContainer);
 

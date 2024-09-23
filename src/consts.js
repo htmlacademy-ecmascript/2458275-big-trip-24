@@ -18,7 +18,14 @@ const EVENT_TYPES = [
   'restaurant'
 ];
 
+const FilterType = {
+  EVERYTHING: 'EVERYTHING',
+  FUTURE: 'FUTURE',
+  PRESENT: 'PRESENT',
+  PAST: 'PAST',
+};
+
 const HOURS = 24;
 const MINUTES = 60;
 
-export {TIME_FORMAT, HOURS, MINUTES, EVENT_TYPES};
+export {TIME_FORMAT, HOURS, MINUTES, EVENT_TYPES, FilterType};

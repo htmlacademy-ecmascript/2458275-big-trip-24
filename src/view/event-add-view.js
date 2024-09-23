@@ -1,7 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {TIME_FORMAT, EVENT_TYPES} from '../consts.js';
-import {createOffersTemplate, createTypeTemplate} from './service.js';
-import {humanizeEventDate} from '../utils.js';
+import {createOffersTemplate, createTypeTemplate, humanizeEventDate} from '../utils/event.js';
 
 function createEventAddingTemplate(event, chosenDestination, chosenOffers, allDestinations, allOffers) {
   const { dateFrom, dateTo, type } = event;

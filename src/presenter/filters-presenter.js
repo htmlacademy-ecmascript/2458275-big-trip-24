@@ -1,15 +1,20 @@
 import FiltersView from '../view/filtes-view.js';
-
+import {generateFilter} from '../mock/filter.js';
 import { render } from '../framework/render.js';
 
 export default class FiltersPresenter {
-  filtersComponent = new FiltersView();
+  #filtersContainer = null;
+  #pointsModel = null;
+  #eventsPoints = [];
 
-  constructor({ filtersContainer }) {
-    this.filtersContainer = filtersContainer;
+  constructor({ filtersContainer, pointsModel }) {
+    this.#filtersContainer = filtersContainer;
+    this.#pointsModel = pointsModel;
   }
 
   init() {
-    render(this.filtersComponent, this.filtersContainer);
+    this.#eventsPoints = [...this.#pointsModel.getPoints()];
+    const filters = generateFilter(this.#eventsPoints);
+    render(new FiltersView({filters}), this.#filtersContainer);
   }
 }
