@@ -1,4 +1,4 @@
-import FiltersView from '../view/filtes-view.js';
+import FiltersView from '../view/filters-view.js';
 import {generateFilter} from '../mock/filter.js';
 import { render } from '../framework/render.js';
 
