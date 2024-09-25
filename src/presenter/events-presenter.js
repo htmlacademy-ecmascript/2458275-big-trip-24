@@ -24,25 +24,40 @@ export default class EventsPresenter {
     this.#eventsPoints = [...this.#pointsModel.getPoints()];
 
     if (this.#eventsPoints.length === 0) {
-      render(new NoEventView(), this.#eventsContainer);
+      this.#renderEmptyList();
       return;
     }
-    render(new SortView(), this.#eventsContainer);
-    render(this.#eventsListComponent, this.#eventsContainer);
+    this.#renderSort();
+
+    this.#renderPointsList();
 
     this.#eventsPoints.forEach((point) => {
       this.#renderEventPoint(point);
     });
   }
 
+  #renderSort() {
+    render(new SortView(), this.#eventsContainer);
+  }
+
+  #renderPointsList() {
+    render(this.#eventsListComponent, this.#eventsContainer);
+  }
+
+  #renderEmptyList() {
+    render(new NoEventView(), this.#eventsContainer);
+  }
+
   #renderEventPoint(point) {
     const destinationsModel = new DestinationsModel();
     const offersModel = new OffersModel();
+
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#eventsListComponent.element,
       destinationsModel,
       offersModel,
     });
+
     pointPresenter.init(point);
   }
 }
