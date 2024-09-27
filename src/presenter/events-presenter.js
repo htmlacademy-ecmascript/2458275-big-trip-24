@@ -43,6 +43,10 @@ export default class EventsPresenter {
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
   };
 
+  #handleModeChange = () => {
+    this.#pointPresenters.forEach((presenter) => presenter.resetView());
+  };
+
   #renderSort() {
     render(new SortView(), this.#eventsContainer);
   }
@@ -67,6 +71,7 @@ export default class EventsPresenter {
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#eventsListComponent.element,
       onDataChange: this.#handlePointChange,
+      onModeChange: this.#handleModeChange,
       destinationsModel,
       offersModel,
     });

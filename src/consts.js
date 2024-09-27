@@ -25,7 +25,12 @@ const FilterType = {
   PAST: 'PAST',
 };
 
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
+
 const HOURS = 24;
 const MINUTES = 60;
 
-export {TIME_FORMAT, HOURS, MINUTES, EVENT_TYPES, FilterType};
+export {TIME_FORMAT, HOURS, MINUTES, EVENT_TYPES, FilterType, Mode};

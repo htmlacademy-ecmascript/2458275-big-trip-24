@@ -2,21 +2,25 @@ import EventEditView from '../view/event-edit-view.js';
 import EventPointView from '../view/event-point-view.js';
 import {isEscapeKey} from '../utils/utils.js';
 import {replace, render, remove} from '../framework/render.js';
+import {Mode} from '../consts.js';
 
 
 export default class PointPresenter {
   #pointListContainer = null;
   #handleDataChange = null;
+  #handleModeChange = null;
 
   #pointComponent = null;
   #pointEditComponent = null;
   #destinationsModel = null;
   #offersModel = null;
   #point = null;
+  #mode = Mode.DEFAULT;
 
-  constructor({pointListContainer, onDataChange, destinationsModel, offersModel}) {
+  constructor({pointListContainer, onDataChange, destinationsModel, offersModel, onModeChange}) {
     this.#pointListContainer = pointListContainer;
     this.#handleDataChange = onDataChange;
+    this.#handleModeChange = onModeChange;
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
   }
@@ -49,11 +53,11 @@ export default class PointPresenter {
       return;
     }
 
-    if (this.#pointListContainer.contains(prevPointComponent.element)) {
+    if (this.#mode === Mode.DEFAULT) {
       replace(this.#pointComponent, prevPointComponent);
     }
 
-    if (this.#pointListContainer.contains(prevPointEditComponent.element)) {
+    if (this.#mode === Mode.EDITING) {
       replace(this.#pointEditComponent, prevPointEditComponent);
     }
 
@@ -66,12 +70,21 @@ export default class PointPresenter {
     remove(this.#pointEditComponent);
   }
 
+  resetView() {
+    if (this.#mode !== Mode.DEFAULT) {
+      this.#replaceEditFormToPoint();
+    }
+  }
+
   #replaceEditFormToPoint() {
     replace(this.#pointComponent, this.#pointEditComponent);
+    this.#mode = Mode.DEFAULT;
   }
 
   #replacePointToEditForm() {
     replace(this.#pointEditComponent, this.#pointComponent);
+    this.#handleModeChange();
+    this.#mode = Mode.EDITING;
   }
 
   #escKeyDownHandler = (evt) => {
@@ -101,3 +114,4 @@ export default class PointPresenter {
     this.#handleDataChange({...this.#point, isFavorite: !this.#point.isFavorite});
   };
 }
+
