@@ -6,6 +6,7 @@ import DestinationsModel from '../model/destinations-model.js';
 import OffersModel from '../model/offers-model.js';
 
 import {render} from '../framework/render.js';
+import {updateItem} from '../utils/utils.js';
 
 export default class EventsPresenter {
   #eventsContainer = null;
@@ -37,6 +38,11 @@ export default class EventsPresenter {
     });
   }
 
+  #handlePointChange = (updatedPoint) => {
+    this.#eventsPoints = updateItem(this.#eventsPoints, updatedPoint);
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
+  };
+
   #renderSort() {
     render(new SortView(), this.#eventsContainer);
   }
@@ -60,6 +66,7 @@ export default class EventsPresenter {
 
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#eventsListComponent.element,
+      onDataChange: this.#handlePointChange,
       destinationsModel,
       offersModel,
     });

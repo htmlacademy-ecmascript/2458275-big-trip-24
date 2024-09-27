@@ -6,6 +6,7 @@ import {replace, render, remove} from '../framework/render.js';
 
 export default class PointPresenter {
   #pointListContainer = null;
+  #handleDataChange = null;
 
   #pointComponent = null;
   #pointEditComponent = null;
@@ -13,8 +14,9 @@ export default class PointPresenter {
   #offersModel = null;
   #point = null;
 
-  constructor({pointListContainer, destinationsModel, offersModel}) {
+  constructor({pointListContainer, onDataChange, destinationsModel, offersModel}) {
     this.#pointListContainer = pointListContainer;
+    this.#handleDataChange = onDataChange;
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
   }
@@ -30,6 +32,7 @@ export default class PointPresenter {
       destination: this.#destinationsModel.getDestinationsById(point.destination),
       offers: [...this.#offersModel.getOffersById(point.type, point.offers)],
       onEditOpenButtonClick: this.#handleEditOpenClick,
+      onFavoriteClick: this.#handleFavoriteClick,
     });
 
     this.#pointEditComponent = new EventEditView ({
@@ -87,5 +90,14 @@ export default class PointPresenter {
   #handleEditCloseClick = () => {
     this.#replaceEditFormToPoint();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
+  };
+
+  #handleFormSubmit = (point) => {
+    this.#handleDataChange(point);
+    this.#replaceEditFormToPoint();
+  };
+
+  #handleFavoriteClick = () => {
+    this.#handleDataChange({...this.#point, isFavorite: !this.#point.isFavorite});
   };
 }

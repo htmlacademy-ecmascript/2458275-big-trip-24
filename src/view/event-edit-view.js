@@ -83,6 +83,7 @@ export default class EventEditView extends AbstractView {
   #allDestinations = null;
   #allOffers = null;
   #handleEditCloseButton = null;
+  #handleFormSubmit = null;
 
   constructor({point, chosenDestination, chosenOffers, allDestinations, allOffers, onEditCloseButtonClick}) {
     super();
@@ -103,5 +104,11 @@ export default class EventEditView extends AbstractView {
   #editCloseButtonHandler = (evt) => {
     evt.preventDefault();
     this.#handleEditCloseButton();
+  };
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit();
+    this.#handleFormSubmit(this.#point);
   };
 }
