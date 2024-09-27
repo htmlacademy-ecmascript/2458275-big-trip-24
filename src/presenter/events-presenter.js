@@ -14,6 +14,7 @@ export default class EventsPresenter {
   #eventsListComponent = new EventsListView();
 
   #eventsPoints = [];
+  #pointPresenters = new Map ();
 
   constructor({ eventsContainer, pointsModel }) {
     this.#eventsContainer = eventsContainer;
@@ -44,6 +45,11 @@ export default class EventsPresenter {
     render(this.#eventsListComponent, this.#eventsContainer);
   }
 
+  #clearPointsList() {
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
+  }
+
   #renderEmptyList() {
     render(new NoEventView(), this.#eventsContainer);
   }
@@ -59,5 +65,6 @@ export default class EventsPresenter {
     });
 
     pointPresenter.init(point);
+    this.#pointPresenters.set(point.id, pointPresenter);
   }
 }
