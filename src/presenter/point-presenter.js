@@ -1,7 +1,7 @@
 import EventEditView from '../view/event-edit-view.js';
 import EventPointView from '../view/event-point-view.js';
 import {isEscapeKey} from '../utils/utils.js';
-import {replace, render} from '../framework/render.js';
+import {replace, render, remove} from '../framework/render.js';
 
 
 export default class PointPresenter {
@@ -22,6 +22,9 @@ export default class PointPresenter {
   init(point) {
     this.#point = point;
 
+    const prevPointComponent = this.#pointComponent;
+    const prevPointEditComponent = this.#pointEditComponent;
+
     this.#pointComponent = new EventPointView ({
       point: this.#point,
       destination: this.#destinationsModel.getDestinationsById(point.destination),
@@ -38,9 +41,27 @@ export default class PointPresenter {
       onEditCloseButtonClick: this.#handleEditCloseClick,
     });
 
-    render(this.#pointComponent, this.#pointListContainer);
+    if (!prevPointComponent || !prevPointEditComponent) {
+      render(this.#pointComponent, this.#pointListContainer);
+      return;
+    }
+
+    if (this.#pointListContainer.contains(prevPointComponent.element)) {
+      replace(this.#pointComponent, prevPointComponent);
+    }
+
+    if (this.#pointListContainer.contains(prevPointEditComponent.element)) {
+      replace(this.#pointEditComponent, prevPointEditComponent);
+    }
+
+    remove(prevPointComponent);
+    remove(prevPointEditComponent);
   }
 
+  destroy() {
+    remove(this.#pointComponent);
+    remove(this.#pointEditComponent);
+  }
 
   #replaceEditFormToPoint() {
     replace(this.#pointComponent, this.#pointEditComponent);
