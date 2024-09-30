@@ -5,7 +5,7 @@ import {createOffersTemplate, createTypeTemplate, humanizeEventDate} from '../ut
 
 function createEventEditingTemplate(event, chosenDestination, chosenOffers, allDestinations, allOffers) {
   const { basePrice, dateFrom, dateTo, type } = event;
-  const { name, description } = chosenDestination;
+  const { name, description, pictures } = chosenDestination;
 
   const typeTemplate = createTypeTemplate(EVENT_TYPES, type);
   const offersTemplate = createOffersTemplate(allOffers.offers, chosenOffers, type);
@@ -71,6 +71,13 @@ function createEventEditingTemplate(event, chosenDestination, chosenOffers, allD
                   <section class="event__section  event__section--destination">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
                     <p class="event__destination-description">${description}</p>
+                    <div class="event__photos-container">
+                      <div class="event__photos-tape">
+                        ${pictures.map((picture) => `
+                          <img class="event__photo" src = ${picture.src} alt=${picture.description}>
+                        `).join('')}
+                      </div>
+                    </div>
                   </section>
                 </section>
               </form>`;
@@ -83,6 +90,7 @@ export default class EventEditView extends AbstractView {
   #allDestinations = null;
   #allOffers = null;
   #handleEditCloseButton = null;
+  #handleFormSubmit;
 
   constructor({point, chosenDestination, chosenOffers, allDestinations, allOffers, onEditCloseButtonClick}) {
     super();
@@ -103,5 +111,11 @@ export default class EventEditView extends AbstractView {
   #editCloseButtonHandler = (evt) => {
     evt.preventDefault();
     this.#handleEditCloseButton();
+  };
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit();
+    this.#handleFormSubmit(this.#point);
   };
 }

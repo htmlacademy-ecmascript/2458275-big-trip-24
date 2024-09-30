@@ -51,15 +51,18 @@ export default class EventPointView extends AbstractView {
   #destination = null;
   #offers = null;
   #handleEditOpenButton = null;
+  #handleFavoriteClick = null;
 
-  constructor({point, destination, offers, onEditOpenButtonClick}) {
+  constructor({point, destination, offers, onEditOpenButtonClick, onFavoriteClick}) {
     super();
     this.#point = point;
     this.#destination = destination;
     this.#offers = offers;
     this.#handleEditOpenButton = onEditOpenButtonClick;
+    this.#handleFavoriteClick = onFavoriteClick;
 
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editOpenButtonHandler);
+    this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteClickHandler);
   }
 
   get template() {
@@ -69,5 +72,10 @@ export default class EventPointView extends AbstractView {
   #editOpenButtonHandler = (evt) => {
     evt.preventDefault();
     this.#handleEditOpenButton();
+  };
+
+  #favoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFavoriteClick();
   };
 }
