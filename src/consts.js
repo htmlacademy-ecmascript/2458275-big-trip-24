@@ -32,7 +32,7 @@ const Mode = {
 
 const SortType = {
   DAY: 'day',
-  TIME: 'duration',
+  TIME: 'time',
   PRICE: 'pice',
 };
 const HOURS = 24;

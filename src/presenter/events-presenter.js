@@ -29,17 +29,9 @@ export default class EventsPresenter {
     this.#eventsPoints = [...this.#pointsModel.getPoints()];
     this.#sourcedEventsPoints = [...this.#pointsModel.getPoints()];
 
-    if (this.#eventsPoints.length === 0) {
-      this.#renderEmptyList();
-      return;
-    }
     this.#renderSort();
 
     this.#renderPointsList();
-
-    this.#eventsPoints.forEach((point) => {
-      this.#renderEventPoint(point);
-    });
   }
 
   #handlePointChange = (updatedPoint) => {
@@ -88,6 +80,15 @@ export default class EventsPresenter {
 
   #renderPointsList() {
     render(this.#eventsListComponent, this.#eventsContainer);
+
+    if (this.#eventsPoints.length === 0) {
+      this.#renderEmptyList();
+      return;
+    }
+    this.#eventsPoints.forEach((point) => {
+      this.#renderEventPoint(point);
+    });
+
   }
 
   #clearPointsList() {

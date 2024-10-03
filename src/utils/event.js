@@ -62,14 +62,18 @@ function isPastPoint (dateTo) {
   return dayjs().isAfter(dateTo, 'D');
 }
 
-const sortPointsByDay = (pointA, pointB) => dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
+function sortPointsByDay (pointA, pointB) {
+  return pointB.dateFrom - pointA.dateFrom;
+}
 
 function sortPointsByDuration (pointA, pointB) {
-  const pointADuration = dayjs(pointA.dateTo).diff(pointA.dateFrom);
-  const pointBDuration = dayjs(pointB.dateTo).diff(pointB.dateFrom);
+  const pointADuration = getEventDuration(pointA.dateFrom, pointA.dateTo);
+  const pointBDuration = getEventDuration(pointB.dateFrom, pointB.dateTo);
   return pointBDuration - pointADuration;
 }
 
-const sortPointsByPrice = (pointA, pointB) => pointB.basePrice - pointA.basePrice;
+function sortPointsByPrice (pointA, pointB) {
+  return pointB.basePrice - pointA.basePrice;
+}
 
 export {createOffersTemplate, createTypeTemplate, humanizeEventDate, getFormattedEventDuration, isFuturePoint, isPresentPoint, isPastPoint, sortPointsByDay, sortPointsByDuration, sortPointsByPrice};
