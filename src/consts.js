@@ -30,7 +30,12 @@ const Mode = {
   EDITING: 'EDITING',
 };
 
+const SortType = {
+  DAY: 'day',
+  TIME: 'duration',
+  PRICE: 'pice',
+};
 const HOURS = 24;
 const MINUTES = 60;
 
-export {TIME_FORMAT, HOURS, MINUTES, EVENT_TYPES, FilterType, Mode};
+export {TIME_FORMAT, HOURS, MINUTES, EVENT_TYPES, FilterType, Mode, SortType};
