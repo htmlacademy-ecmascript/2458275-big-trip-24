@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {TIME_FORMAT} from '../consts.js';
-import {humanizeEventDate, getEventDuration} from '../utils/event.js';
+import {humanizeEventDate, getFormattedEventDuration} from '../utils/event.js';
 
 function createEventTemplate(event, destination, offers) {
   const { basePrice, dateFrom, dateTo, isFavorite, type } = event;
@@ -18,7 +18,7 @@ function createEventTemplate(event, destination, offers) {
                     &mdash;
                     <time class="event__end-time" datetime="${dateTo}">${humanizeEventDate(event.dateTo, TIME_FORMAT.eventTime)}</time>
                   </p>
-                  <p class="event__duration">${getEventDuration(dateFrom, dateTo)}</p>
+                  <p class="event__duration">${getFormattedEventDuration (dateFrom, dateTo)}</p>
                 </div>
                 <p class="event__price">
                   &euro;&nbsp;<span class="event__price-value">${basePrice}</span>

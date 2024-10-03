@@ -25,13 +25,28 @@ function humanizeEventDate(eventDate, format) {
 }
 
 function getEventDuration (eventStart, eventEnd) {
-  const eventDurationMinutes = dayjs(eventEnd).diff(eventStart, 'minute');
+  return dayjs(eventEnd).diff(eventStart, 'minute');
+}
+
+function getFormattedEventDuration (eventStart, eventEnd) {
+  const eventDurationMinutes = getEventDuration(eventStart, eventEnd);
 
   const days = eventDurationMinutes > (MINUTES * HOURS) ? Math.floor(eventDurationMinutes / (MINUTES * HOURS)) : '';
-  const hours = eventDurationMinutes > MINUTES ? Math.floor(eventDurationMinutes / MINUTES) : '';
-  const minutes = eventDurationMinutes - hours * MINUTES;
+  const hoursTotal = Math.floor(eventDurationMinutes / MINUTES);
+  const hours = eventDurationMinutes > MINUTES ? hoursTotal % HOURS : '';
+  const minutes = eventDurationMinutes - (hoursTotal * MINUTES);
 
-  const formattedEventDuration = eventDurationMinutes < MINUTES ? `${padToTwoDigits(eventDurationMinutes)}M` : `${padToTwoDigits(days)}D ${padToTwoDigits(hours)}H ${padToTwoDigits(minutes)}M`;
+  let formattedEventDuration;
+
+  if (eventDurationMinutes < MINUTES) {
+    formattedEventDuration = `${padToTwoDigits(eventDurationMinutes)}M`;
+  } else
+  if (eventDurationMinutes > (MINUTES * HOURS)) {
+    formattedEventDuration = `${padToTwoDigits(days)}D ${padToTwoDigits(hours)}H ${padToTwoDigits(minutes)}M`;
+  } else
+  if (eventDurationMinutes > MINUTES && eventDurationMinutes < (MINUTES * HOURS)) {
+    formattedEventDuration = `${padToTwoDigits(hours)}H ${padToTwoDigits(minutes)}M`;
+  }
   return formattedEventDuration;
 }
 
@@ -47,4 +62,18 @@ function isPastPoint (dateTo) {
   return dayjs().isAfter(dateTo, 'D');
 }
 
-export {createOffersTemplate, createTypeTemplate, humanizeEventDate, getEventDuration, isFuturePoint, isPresentPoint, isPastPoint};
+function sortPointsByDay (pointA, pointB) {
+  return dayjs(pointB.dateFrom).diff(dayjs(pointA.dateFrom));
+}
+
+function sortPointsByDuration (pointA, pointB) {
+  const pointADuration = getEventDuration(pointA.dateFrom, pointA.dateTo);
+  const pointBDuration = getEventDuration(pointB.dateFrom, pointB.dateTo);
+  return pointBDuration - pointADuration;
+}
+
+function sortPointsByPrice (pointA, pointB) {
+  return pointB.basePrice - pointA.basePrice;
+}
+
+export {createOffersTemplate, createTypeTemplate, humanizeEventDate, getFormattedEventDuration, isFuturePoint, isPresentPoint, isPastPoint, sortPointsByDay, sortPointsByDuration, sortPointsByPrice};
