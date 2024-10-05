@@ -44,7 +44,7 @@ export default class PointPresenter {
       chosenDestination: this.#destinationsModel.getDestinationsById(point.destination),
       chosenOffers: [...this.#offersModel.getOffersById(point.type, point.offers)],
       allDestinations: this.#destinationsModel.getDestinations(),
-      allOffers: this.#offersModel.getOffersByType(point.type),
+      allTypeOffers: this.#offersModel.getOffersByType(point.type),
       onEditCloseButtonClick: this.#handleEditCloseClick,
     });
 

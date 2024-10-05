@@ -3,12 +3,12 @@ import {TIME_FORMAT, EVENT_TYPES} from '../consts.js';
 import {createOffersTemplate, createTypeTemplate, humanizeEventDate} from '../utils/event.js';
 
 
-function createEventEditingTemplate(event, chosenDestination, chosenOffers, allDestinations, allOffers) {
-  const { basePrice, dateFrom, dateTo, type } = event;
+function createEventEditingTemplate({point, chosenDestination, chosenOffers, allDestinations, allTypeOffers}) {
+  const { basePrice, dateFrom, dateTo, type } = point;
   const { name, description, pictures } = chosenDestination;
 
   const typeTemplate = createTypeTemplate(EVENT_TYPES, type);
-  const offersTemplate = createOffersTemplate(allOffers.offers, chosenOffers, type);
+  const offersTemplate = createOffersTemplate(allTypeOffers.offers, chosenOffers, type);
 
   return `<form class="event event--edit" action="#" method="post">
                 <header class="event__header">
@@ -84,25 +84,34 @@ function createEventEditingTemplate(event, chosenDestination, chosenOffers, allD
 }
 
 export default class EventEditView extends AbstractStatefulView {
+  #allDestinations = [];
+  #allTypeOffers = [];
+  #handleEditCloseButton = null;
   #chosenDestination = null;
   #chosenOffers = null;
-  #allDestinations = null;
-  #allOffers = null;
-  #handleEditCloseButton = null;
+
   #handleFormSubmit;
 
-  constructor({point, chosenDestination, chosenOffers, allDestinations, allOffers, onEditCloseButtonClick}) {
+  constructor({point, chosenDestination, chosenOffers, allDestinations, allTypeOffers, onEditCloseButtonClick}) {
     super();
-    this._setState(EventEditView.parsePointToState(point, chosenDestination, chosenOffers));
+    this._setState(EventEditView.parsePointToState(point));
     this.#allDestinations = allDestinations;
-    this.#allOffers = allOffers;
+    this.#allTypeOffers = allTypeOffers;
+    this.#chosenDestination = chosenDestination;
+    this.#chosenOffers = chosenOffers;
     this.#handleEditCloseButton = onEditCloseButtonClick;
 
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editCloseButtonHandler);
   }
 
   get template() {
-    return createEventEditingTemplate(this._state, this.#allDestinations, this.#allOffers);
+    return createEventEditingTemplate({
+      point: this._state,
+      allDestinations: this.#allDestinations,
+      allTypeOffers: this.#allTypeOffers,
+      chosenDestination: this.#chosenDestination,
+      chosenOffers: this.#chosenOffers,
+    });
   }
 
   #editCloseButtonHandler = (evt) => {
@@ -117,8 +126,9 @@ export default class EventEditView extends AbstractStatefulView {
 
   static parsePointToState(point) {
     return {...point};
-  };
+  }
 
   static parseStateToPoint(state) {
-    return { ...state };
+    return {...state};
+  }
 }
