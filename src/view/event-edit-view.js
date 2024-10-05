@@ -1,4 +1,4 @@
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {TIME_FORMAT, EVENT_TYPES} from '../consts.js';
 import {createOffersTemplate, createTypeTemplate, humanizeEventDate} from '../utils/event.js';
 
@@ -83,8 +83,7 @@ function createEventEditingTemplate(event, chosenDestination, chosenOffers, allD
               </form>`;
 }
 
-export default class EventEditView extends AbstractView {
-  #point = null;
+export default class EventEditView extends AbstractStatefulView {
   #chosenDestination = null;
   #chosenOffers = null;
   #allDestinations = null;
@@ -94,9 +93,7 @@ export default class EventEditView extends AbstractView {
 
   constructor({point, chosenDestination, chosenOffers, allDestinations, allOffers, onEditCloseButtonClick}) {
     super();
-    this.#point = point;
-    this.#chosenDestination = chosenDestination;
-    this.#chosenOffers = chosenOffers;
+    this._setState(EventEditView.parsePointToState(point, chosenDestination, chosenOffers));
     this.#allDestinations = allDestinations;
     this.#allOffers = allOffers;
     this.#handleEditCloseButton = onEditCloseButtonClick;
@@ -105,7 +102,7 @@ export default class EventEditView extends AbstractView {
   }
 
   get template() {
-    return createEventEditingTemplate(this.#point, this.#chosenDestination, this.#chosenOffers, this.#allDestinations, this.#allOffers);
+    return createEventEditingTemplate(this._state, this.#allDestinations, this.#allOffers);
   }
 
   #editCloseButtonHandler = (evt) => {
@@ -115,7 +112,13 @@ export default class EventEditView extends AbstractView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit();
-    this.#handleFormSubmit(this.#point);
+    this.#handleFormSubmit(EventEditView.parseStateToTask(this._state));
   };
+
+  static parsePointToState(point) {
+    return {...point};
+  };
+
+  static parseStateToPoint(state) {
+    return { ...state };
 }
