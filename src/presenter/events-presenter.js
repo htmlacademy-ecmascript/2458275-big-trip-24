@@ -60,6 +60,7 @@ export default class EventsPresenter {
   }
 
   #renderPointsList() {
+    this.#eventsPoints.sort(sortPointsByDay);
     render(this.#eventsListComponent, this.#eventsContainer);
 
     if (this.#eventsPoints.length === 0) {

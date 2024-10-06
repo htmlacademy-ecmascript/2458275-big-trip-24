@@ -63,7 +63,7 @@ function isPastPoint (dateTo) {
 }
 
 function sortPointsByDay (pointA, pointB) {
-  return dayjs(pointB.dateFrom).diff(dayjs(pointA.dateFrom));
+  return dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
 }
 
 function sortPointsByDuration (pointA, pointB) {
