@@ -26,11 +26,10 @@ export default class EventsPresenter {
   }
 
   init() {
-    this.#eventsPoints = [...this.#pointsModel.getPoints()];
-    this.#sourcedEventsPoints = [...this.#pointsModel.getPoints()];
+    this.#eventsPoints = [...this.#pointsModel.getPoints()].sort(sortPointsByDay);
+    this.#sourcedEventsPoints = [...this.#pointsModel.getPoints()].sort(sortPointsByDay);
 
     this.#renderSort();
-
     this.#renderPointsList();
   }
 
@@ -60,7 +59,7 @@ export default class EventsPresenter {
   }
 
   #renderPointsList() {
-    this.#eventsPoints.sort(sortPointsByDay);
+
     render(this.#eventsListComponent, this.#eventsContainer);
 
     if (this.#eventsPoints.length === 0) {
