@@ -3,8 +3,10 @@ import {TIME_FORMAT, EVENT_TYPES} from '../consts.js';
 import {createOffersTemplate, createTypeTemplate, humanizeEventDate} from '../utils/event.js';
 
 
-function createEventEditingTemplate({point, chosenDestination, chosenOffers, allDestinations, allTypeOffers}) {
-  const { basePrice, dateFrom, dateTo, type } = point;
+function createEventEditingTemplate({point, chosenOffers, allDestinations, allTypeOffers}) {
+  const { basePrice, dateFrom, dateTo, type, destination } = point;
+  const chosenDestination = allDestinations.find((item) => item.id === destination);
+
   const { name, description, pictures } = chosenDestination;
 
   const typeTemplate = createTypeTemplate(EVENT_TYPES, type);
@@ -33,7 +35,7 @@ function createEventEditingTemplate({point, chosenDestination, chosenOffers, all
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
                     <datalist id="destination-list-1">
-                    ${allDestinations.map((destination) => `<option value=${destination.name}></option>`).join('')}
+                    ${allDestinations.map((item) => `<option value=${item.name}></option>`).join('')}
                     </datalist>
                   </div>
 
@@ -92,21 +94,20 @@ export default class EventEditView extends AbstractStatefulView {
   #allDestinations = [];
   #allTypeOffers = [];
   #handleEditCloseButton = null;
-  #chosenDestination = null;
   #chosenOffers = null;
+  #allOffers = null;
 
   #handleFormSubmit;
 
-  constructor({point, chosenDestination, chosenOffers, allDestinations, allTypeOffers, onEditCloseButtonClick}) {
+  constructor({point, chosenOffers, allDestinations, allTypeOffers, allOffers, onEditCloseButtonClick}) {
     super();
     this._setState(EventEditView.parsePointToState(point));
     this.#allDestinations = allDestinations;
     this.#allTypeOffers = allTypeOffers;
-    this.#chosenDestination = chosenDestination;
     this.#chosenOffers = chosenOffers;
+    this.#allOffers = allOffers;
     this.#handleEditCloseButton = onEditCloseButtonClick;
-
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editCloseButtonHandler);
+    this._restoreHandlers();
   }
 
   get template() {
@@ -114,20 +115,61 @@ export default class EventEditView extends AbstractStatefulView {
       point: this._state,
       allDestinations: this.#allDestinations,
       allTypeOffers: this.#allTypeOffers,
-      chosenDestination: this.#chosenDestination,
       chosenOffers: this.#chosenOffers,
     });
   }
+
+  reset(point) {
+    this.updateElement(
+      EventEditView.parsePointToState(point),
+    );
+  }
+
+  _restoreHandlers() {
+    this.element.querySelector('.event__save-btn').addEventListener('submit', this.#formSubmitHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editCloseButtonHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
+    this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
+    this.element.querySelector('.event__input--price').addEventListener('input', this.#priceChangeHandler);
+  }
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit(EventEditView.parseStateToTask(this._state));
+  };
 
   #editCloseButtonHandler = (evt) => {
     evt.preventDefault();
     this.#handleEditCloseButton();
   };
 
-  #formSubmitHandler = (evt) => {
+  #destinationChangeHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit(EventEditView.parseStateToTask(this._state));
+    const targetDestination = evt.target.value;
+    const newDestination = this.#allDestinations.find((item) => item.name === targetDestination);
+    this.updateElement({
+      destination: newDestination.id,
+    });
+
   };
+
+  #typeChangeHandler = (evt) => {
+    evt.preventDefault();
+
+    const targetType = evt.target.value;
+    const allTypeOffers = this.#allOffers.find((item) => item.type === targetType);
+
+    this.updateElement ({ type: targetType, allTypeOffers: allTypeOffers });
+  };
+
+  #priceChangeHandler = (evt) => {
+    evt.preventDefault();
+    const newPrice = evt.target.value;
+    this._setState({
+      basePrice: newPrice
+    });
+  };
+
 
   static parsePointToState(point) {
     return {...point};
