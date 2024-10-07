@@ -9,7 +9,7 @@ const getOffersByType = (allOffers, type) => allOffers.find((offer) => offer.typ
 const getOffersById = (allOffers, type, itemsIds) => {
   const offersType = getOffersByType(allOffers, type);
   return offersType.filter((item) => itemsIds.includes(item.id));
-}
+};
 
 function createOffersTemplate(offers, chosenOffers, type) {
   return offers.map((offer) => `<div class="event__offer-selector">
