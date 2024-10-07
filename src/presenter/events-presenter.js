@@ -26,19 +26,12 @@ export default class EventsPresenter {
   }
 
   init() {
-    this.#eventsPoints = [...this.#pointsModel.getPoints()];
-    this.#sourcedEventsPoints = [...this.#pointsModel.getPoints()];
+    this.#eventsPoints = [...this.#pointsModel.getPoints()].sort(sortPointsByDay);
+    this.#sourcedEventsPoints = [...this.#pointsModel.getPoints()].sort(sortPointsByDay);
 
     this.#renderSort();
-
     this.#renderPointsList();
   }
-
-  #handlePointChange = (updatedPoint) => {
-    this.#eventsPoints = updateItem(this.#eventsPoints, updatedPoint);
-    this.#sourcedEventsPoints = updateItem(this.#sourcedEventsPoints, updatedPoint);
-    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
-  };
 
   #sortPoints(sortType) {
     switch (sortType) {
@@ -58,19 +51,6 @@ export default class EventsPresenter {
     this.#currentSortType = sortType;
   }
 
-  #handleModeChange = () => {
-    this.#pointPresenters.forEach((presenter) => presenter.resetView());
-  };
-
-  #handleSortTypeChange = (sortType) => {
-    if (this.#currentSortType === sortType) {
-      return;
-    }
-    this.#sortPoints(sortType);
-    this.#clearPointsList();
-    this.#renderPointsList();
-  };
-
   #renderSort() {
     this.#sortComponent = new SortView({
       onSortTypeChange: this.#handleSortTypeChange
@@ -79,6 +59,7 @@ export default class EventsPresenter {
   }
 
   #renderPointsList() {
+
     render(this.#eventsListComponent, this.#eventsContainer);
 
     if (this.#eventsPoints.length === 0) {
@@ -115,4 +96,23 @@ export default class EventsPresenter {
     pointPresenter.init(point);
     this.#pointPresenters.set(point.id, pointPresenter);
   }
+
+  #handlePointChange = (updatedPoint) => {
+    this.#eventsPoints = updateItem(this.#eventsPoints, updatedPoint);
+    this.#sourcedEventsPoints = updateItem(this.#sourcedEventsPoints, updatedPoint);
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
+  };
+
+  #handleModeChange = () => {
+    this.#pointPresenters.forEach((presenter) => presenter.resetView());
+  };
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+    this.#sortPoints(sortType);
+    this.#clearPointsList();
+    this.#renderPointsList();
+  };
 }

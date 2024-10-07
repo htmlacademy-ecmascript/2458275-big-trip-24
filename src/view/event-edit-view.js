@@ -1,14 +1,18 @@
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {TIME_FORMAT, EVENT_TYPES} from '../consts.js';
-import {createOffersTemplate, createTypeTemplate, humanizeEventDate} from '../utils/event.js';
+import {createOffersTemplate, createTypeTemplate, humanizeEventDate, getOffersByType, getOffersById} from '../utils/event.js';
 
 
-function createEventEditingTemplate(event, chosenDestination, chosenOffers, allDestinations, allOffers) {
-  const { basePrice, dateFrom, dateTo, type } = event;
+function createEventEditingTemplate({point, allDestinations, allOffers}) {
+  const { basePrice, dateFrom, dateTo, type, destination, offers } = point;
+  const chosenDestination = allDestinations.find((item) => item.id === destination);
+  const allTypeOffers = getOffersByType(allOffers, type);
+  const chosenOffers = getOffersById(allOffers, type, offers);
+
   const { name, description, pictures } = chosenDestination;
 
   const typeTemplate = createTypeTemplate(EVENT_TYPES, type);
-  const offersTemplate = createOffersTemplate(allOffers.offers, chosenOffers, type);
+  const offersTemplate = createOffersTemplate(allTypeOffers, chosenOffers, type);
 
   return `<form class="event event--edit" action="#" method="post">
                 <header class="event__header">
@@ -33,7 +37,7 @@ function createEventEditingTemplate(event, chosenDestination, chosenOffers, allD
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
                     <datalist id="destination-list-1">
-                    ${allDestinations.map((destination) => `<option value=${destination.name}></option>`).join('')}
+                    ${allDestinations.map((item) => `<option value=${item.name}></option>`).join('')}
                     </datalist>
                   </div>
 
@@ -60,62 +64,113 @@ function createEventEditingTemplate(event, chosenDestination, chosenOffers, allD
                   </button>
                 </header>
                 <section class="event__details">
-                  <section class="event__section  event__section--offers">
+                  ${allTypeOffers.length > 0 ? `<section class="event__section  event__section--offers">
                     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                     <div class="event__available-offers">
                       ${offersTemplate}
                     </div>
-                  </section>
-
+                  </section>` : ''}
+                  ${description || pictures.length > 0 ? `
                   <section class="event__section  event__section--destination">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                    <p class="event__destination-description">${description}</p>
-                    <div class="event__photos-container">
+                      ${description
+    ? (`<p class="event__destination-description">${description}</p>`)
+    : ''}
+                      ${pictures.length > 0
+    ? `<div class="event__photos-container">
                       <div class="event__photos-tape">
                         ${pictures.map((picture) => `
                           <img class="event__photo" src = ${picture.src} alt=${picture.description}>
                         `).join('')}
                       </div>
-                    </div>
-                  </section>
+                    </div>`
+    : ''
+}
+                  </section>` : ''}
                 </section>
               </form>`;
 }
 
-export default class EventEditView extends AbstractView {
-  #point = null;
-  #chosenDestination = null;
-  #chosenOffers = null;
-  #allDestinations = null;
-  #allOffers = null;
+export default class EventEditView extends AbstractStatefulView {
+  #allDestinations = [];
+  #allOffers = [];
   #handleEditCloseButton = null;
+
   #handleFormSubmit;
 
-  constructor({point, chosenDestination, chosenOffers, allDestinations, allOffers, onEditCloseButtonClick}) {
+  constructor({point, allDestinations, allOffers, onEditCloseButtonClick}) {
     super();
-    this.#point = point;
-    this.#chosenDestination = chosenDestination;
-    this.#chosenOffers = chosenOffers;
+    this._setState(EventEditView.parsePointToState(point));
     this.#allDestinations = allDestinations;
     this.#allOffers = allOffers;
     this.#handleEditCloseButton = onEditCloseButtonClick;
-
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editCloseButtonHandler);
+    this._restoreHandlers();
   }
 
   get template() {
-    return createEventEditingTemplate(this.#point, this.#chosenDestination, this.#chosenOffers, this.#allDestinations, this.#allOffers);
+    return createEventEditingTemplate({
+      point: this._state,
+      allDestinations: this.#allDestinations,
+      allOffers: this.#allOffers,
+    });
   }
+
+  reset(point) {
+    this.updateElement(
+      EventEditView.parsePointToState(point),
+    );
+  }
+
+  _restoreHandlers() {
+    this.element.querySelector('.event__save-btn').addEventListener('submit', this.#formSubmitHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editCloseButtonHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
+    this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
+    this.element.querySelector('.event__input--price').addEventListener('input', this.#priceChangeHandler);
+  }
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit(EventEditView.parseStateToTask(this._state));
+  };
 
   #editCloseButtonHandler = (evt) => {
     evt.preventDefault();
     this.#handleEditCloseButton();
   };
 
-  #formSubmitHandler = (evt) => {
+  #destinationChangeHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit();
-    this.#handleFormSubmit(this.#point);
+    const targetDestination = evt.target.value;
+    const newDestination = this.#allDestinations.find((item) => item.name === targetDestination);
+    this.updateElement({
+      destination: newDestination.id,
+    });
+
   };
+
+  #typeChangeHandler = (evt) => {
+    evt.preventDefault();
+
+    const targetType = evt.target.value;
+    this.updateElement ({ type: targetType, offers: [] });
+  };
+
+  #priceChangeHandler = (evt) => {
+    evt.preventDefault();
+    const newPrice = evt.target.value;
+    this._setState({
+      basePrice: newPrice
+    });
+  };
+
+
+  static parsePointToState(point) {
+    return {...point};
+  }
+
+  static parseStateToPoint(state) {
+    return {...state};
+  }
 }

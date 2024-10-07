@@ -41,10 +41,8 @@ export default class PointPresenter {
 
     this.#pointEditComponent = new EventEditView ({
       point: this.#point,
-      chosenDestination: this.#destinationsModel.getDestinationsById(point.destination),
-      chosenOffers: [...this.#offersModel.getOffersById(point.type, point.offers)],
       allDestinations: this.#destinationsModel.getDestinations(),
-      allOffers: this.#offersModel.getOffersByType(point.type),
+      allOffers: this.#offersModel.getOffers(),
       onEditCloseButtonClick: this.#handleEditCloseClick,
     });
 
@@ -72,6 +70,7 @@ export default class PointPresenter {
 
   resetView() {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceEditFormToPoint();
     }
   }
@@ -82,14 +81,16 @@ export default class PointPresenter {
   }
 
   #replacePointToEditForm() {
-    replace(this.#pointEditComponent, this.#pointComponent);
     this.#handleModeChange();
+    replace(this.#pointEditComponent, this.#pointComponent);
+    document.addEventListener('keydown', this.#escKeyDownHandler);
     this.#mode = Mode.EDITING;
   }
 
   #escKeyDownHandler = (evt) => {
-    if (isEscapeKey) {
+    if (isEscapeKey(evt)) {
       evt.preventDefault();
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceEditFormToPoint();
       document.removeEventListener('keydown', this.#escKeyDownHandler);
     }
@@ -101,6 +102,7 @@ export default class PointPresenter {
   };
 
   #handleEditCloseClick = () => {
+    this.#pointEditComponent.reset(this.#point);
     this.#replaceEditFormToPoint();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
