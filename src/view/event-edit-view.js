@@ -116,6 +116,7 @@ export default class EventEditView extends AbstractStatefulView {
       allDestinations: this.#allDestinations,
       allTypeOffers: this.#allTypeOffers,
       chosenOffers: this.#chosenOffers,
+      allOffers: this.#allOffers,
     });
   }
 
