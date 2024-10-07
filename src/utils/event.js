@@ -2,6 +2,15 @@ import dayjs from 'dayjs';
 import {HOURS, MINUTES} from '../consts.js';
 import {capitalize, padToTwoDigits} from '../utils/utils.js';
 
+
+const getOffersByType = (allOffers, type) => allOffers.find((offer) => offer.type === type).offers;
+
+
+const getOffersById = (allOffers, type, itemsIds) => {
+  const offersType = getOffersByType(allOffers, type);
+  return offersType.filter((item) => itemsIds.includes(item.id));
+}
+
 function createOffersTemplate(offers, chosenOffers, type) {
   return offers.map((offer) => `<div class="event__offer-selector">
                       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-1" type="checkbox" name="event-offer-${type}"  ${chosenOffers.includes(offer) ? 'checked' : ''}>
@@ -76,4 +85,4 @@ function sortPointsByPrice (pointA, pointB) {
   return pointB.basePrice - pointA.basePrice;
 }
 
-export {createOffersTemplate, createTypeTemplate, humanizeEventDate, getFormattedEventDuration, isFuturePoint, isPresentPoint, isPastPoint, sortPointsByDay, sortPointsByDuration, sortPointsByPrice};
+export {createOffersTemplate, createTypeTemplate, humanizeEventDate, getFormattedEventDuration, isFuturePoint, isPresentPoint, isPastPoint, sortPointsByDay, sortPointsByDuration, sortPointsByPrice, getOffersByType, getOffersById};

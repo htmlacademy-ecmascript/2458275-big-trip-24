@@ -1,16 +1,18 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {TIME_FORMAT, EVENT_TYPES} from '../consts.js';
-import {createOffersTemplate, createTypeTemplate, humanizeEventDate} from '../utils/event.js';
+import {createOffersTemplate, createTypeTemplate, humanizeEventDate, getOffersByType, getOffersById} from '../utils/event.js';
 
 
-function createEventEditingTemplate({point, chosenOffers, allDestinations, allTypeOffers}) {
-  const { basePrice, dateFrom, dateTo, type, destination } = point;
+function createEventEditingTemplate({point, allDestinations, allOffers}) {
+  const { basePrice, dateFrom, dateTo, type, destination, offers } = point;
   const chosenDestination = allDestinations.find((item) => item.id === destination);
+  const allTypeOffers = getOffersByType(allOffers, type);
+  const chosenOffers = getOffersById(allOffers, type, offers);
 
   const { name, description, pictures } = chosenDestination;
 
   const typeTemplate = createTypeTemplate(EVENT_TYPES, type);
-  const offersTemplate = createOffersTemplate(allTypeOffers.offers, chosenOffers, type);
+  const offersTemplate = createOffersTemplate(allTypeOffers, chosenOffers, type);
 
   return `<form class="event event--edit" action="#" method="post">
                 <header class="event__header">
@@ -62,7 +64,7 @@ function createEventEditingTemplate({point, chosenOffers, allDestinations, allTy
                   </button>
                 </header>
                 <section class="event__details">
-                  ${allTypeOffers.offers.length > 0 ? `<section class="event__section  event__section--offers">
+                  ${allTypeOffers.length > 0 ? `<section class="event__section  event__section--offers">
                     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                     <div class="event__available-offers">
@@ -92,19 +94,15 @@ function createEventEditingTemplate({point, chosenOffers, allDestinations, allTy
 
 export default class EventEditView extends AbstractStatefulView {
   #allDestinations = [];
-  #allTypeOffers = [];
+  #allOffers = [];
   #handleEditCloseButton = null;
-  #chosenOffers = null;
-  #allOffers = null;
 
   #handleFormSubmit;
 
-  constructor({point, chosenOffers, allDestinations, allTypeOffers, allOffers, onEditCloseButtonClick}) {
+  constructor({point, allDestinations, allOffers, onEditCloseButtonClick}) {
     super();
     this._setState(EventEditView.parsePointToState(point));
     this.#allDestinations = allDestinations;
-    this.#allTypeOffers = allTypeOffers;
-    this.#chosenOffers = chosenOffers;
     this.#allOffers = allOffers;
     this.#handleEditCloseButton = onEditCloseButtonClick;
     this._restoreHandlers();
@@ -114,8 +112,6 @@ export default class EventEditView extends AbstractStatefulView {
     return createEventEditingTemplate({
       point: this._state,
       allDestinations: this.#allDestinations,
-      allTypeOffers: this.#allTypeOffers,
-      chosenOffers: this.#chosenOffers,
       allOffers: this.#allOffers,
     });
   }
@@ -158,9 +154,7 @@ export default class EventEditView extends AbstractStatefulView {
     evt.preventDefault();
 
     const targetType = evt.target.value;
-    const allTypeOffers = this.#allOffers.find((item) => item.type === targetType);
-
-    this.updateElement ({ type: targetType, allTypeOffers: allTypeOffers });
+    this.updateElement ({ type: targetType, offers: [] });
   };
 
   #priceChangeHandler = (evt) => {
