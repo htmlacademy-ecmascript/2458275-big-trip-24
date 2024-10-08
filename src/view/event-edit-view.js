@@ -1,6 +1,9 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {TIME_FORMAT, EVENT_TYPES} from '../consts.js';
 import {createOffersTemplate, createTypeTemplate, humanizeEventDate, getOffersByType, getOffersById} from '../utils/event.js';
+import flatpickr from 'flatpickr';
+
+import 'flatpickr/dist/flatpickr.min.css';
 
 
 function createEventEditingTemplate({point, allDestinations, allOffers}) {
@@ -96,8 +99,8 @@ export default class EventEditView extends AbstractStatefulView {
   #allDestinations = [];
   #allOffers = [];
   #handleEditCloseButton = null;
-
-  #handleFormSubmit;
+  #handleFormSubmit = null;
+  #datepicker = null;
 
   constructor({point, allDestinations, allOffers, onEditCloseButtonClick}) {
     super();
@@ -116,6 +119,15 @@ export default class EventEditView extends AbstractStatefulView {
     });
   }
 
+  removeElement() {
+    super.removeElement();
+
+    if (this.#datepicker) {
+      this.#datepicker.destroy();
+      this.#datepicker = null;
+    }
+  }
+
   reset(point) {
     this.updateElement(
       EventEditView.parsePointToState(point),
@@ -128,6 +140,34 @@ export default class EventEditView extends AbstractStatefulView {
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
     this.element.querySelector('.event__input--price').addEventListener('input', this.#priceChangeHandler);
+
+    this.#setDatepickers();
+  }
+
+  #setDatepickers() {
+    const commonConfig = {
+      dateFormat: 'd/m/y H:i',
+      enableTime: true,
+      'time_24hr': true
+    };
+
+    this.datepickerFrom = flatpickr(
+      this.element.querySelector('#event-start-time-1'),
+      {
+        ...commonConfig,
+        defaultDate: this._state.dateFrom,
+        onclose: this.#dateFromChangeHandler,
+        maxDate: this._state.dateTo,
+      });
+
+    this.datepickerTo = flatpickr(
+      this.element.querySelector('#event-end-time-1'),
+      {
+        ...commonConfig,
+        defaultDate: this._state.dateTo,
+        onclose: this.#dateToChangeHandler,
+        minDate: this._state.dateFrom,
+      });
   }
 
   #formSubmitHandler = (evt) => {
@@ -165,6 +205,17 @@ export default class EventEditView extends AbstractStatefulView {
     });
   };
 
+  #dateFromChangeHandler = ([userDate]) => {
+    this._setState({
+      dateFrom: userDate
+    });
+  };
+
+  #dateToChangeHandler = ([userDate]) => {
+    this._setState({
+      dateTo: userDate
+    });
+  };
 
   static parsePointToState(point) {
     return {...point};
