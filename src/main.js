@@ -1,5 +1,5 @@
 import FiltersPresenter from './presenter/filters-presenter.js';
-import EventsPresenter from './presenter/events-presenter.js';
+import BoardPresenter from './presenter/board-presenter.js';
 
 import PointsModel from './model/points-model.js';
 
@@ -15,10 +15,10 @@ const filtersPresenter = new FiltersPresenter({
   pointsModel,
 });
 
-const eventsPresenter = new EventsPresenter({
+const boardPresenter = new BoardPresenter({
   eventsContainer: tripEventsElement,
   pointsModel,
 });
 
 filtersPresenter.init();
-eventsPresenter.init();
+boardPresenter.init();

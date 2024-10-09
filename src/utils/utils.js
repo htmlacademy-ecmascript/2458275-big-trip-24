@@ -10,9 +10,5 @@ function padToTwoDigits(number) {
   return number.toString().padStart(2, '0');
 }
 
-function updateItem(items, update) {
-  return items.map((item) => item.id === update.id ? update : item);
-}
-
-export {getRandomArrayElement, padToTwoDigits, capitalize, isEscapeKey, updateItem};
+export {getRandomArrayElement, padToTwoDigits, capitalize, isEscapeKey};
 

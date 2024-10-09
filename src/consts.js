@@ -35,7 +35,20 @@ const SortType = {
   TIME: 'time',
   PRICE: 'pice',
 };
+
+const UserAction = {
+  UPDATE_POINT: 'UPDATE_ POINT',
+  ADD_POINT: 'ADD_ POINT',
+  DELETE_POINT: 'DELETE_ POINT',
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
 const HOURS = 24;
 const MINUTES = 60;
 
-export {TIME_FORMAT, HOURS, MINUTES, EVENT_TYPES, FilterType, Mode, SortType};
+export {TIME_FORMAT, HOURS, MINUTES, EVENT_TYPES, FilterType, Mode, SortType, UserAction, UpdateType};

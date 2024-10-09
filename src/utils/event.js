@@ -85,4 +85,9 @@ function sortPointsByPrice (pointA, pointB) {
   return pointB.basePrice - pointA.basePrice;
 }
 
-export {createOffersTemplate, createTypeTemplate, humanizeEventDate, getFormattedEventDuration, isFuturePoint, isPresentPoint, isPastPoint, sortPointsByDay, sortPointsByDuration, sortPointsByPrice, getOffersByType, getOffersById};
+function isDatesEqual(dateA, dateB) {
+  return (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
+}
+
+
+export {createOffersTemplate, createTypeTemplate, humanizeEventDate, getFormattedEventDuration, isFuturePoint, isPresentPoint, isPastPoint, sortPointsByDay, sortPointsByDuration, sortPointsByPrice, getOffersByType, getOffersById, isDatesEqual};
