@@ -1,102 +1,171 @@
-import AbstractView from '../framework/view/abstract-view.js';
-import {TIME_FORMAT, EVENT_TYPES} from '../consts.js';
-import {createOffersTemplate, createTypeTemplate, humanizeEventDate} from '../utils/point.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
+import {EVENT_TYPES} from '../consts.js';
+import {getOffersByType, getOffersById, getChosenDestination} from '../utils/point.js';
+import {createTypeTemplate, createDestinationsTemplate, createTimeTemplate, createPriceTemplate, createOffersTemplate, createDescriptionTemplate} from './templates-for-views.js';
 
-function createPointAddingTemplate(event, chosenDestination, chosenOffers, allDestinations, allOffers) {
-  const { dateFrom, dateTo, type } = event;
+import flatpickr from 'flatpickr';
+
+import 'flatpickr/dist/flatpickr.min.css';
+
+
+function createNewPointTemplate({point, allDestinations, allOffers}) {
+  const { basePrice, dateFrom, dateTo, type, destination, offers } = point;
+  const chosenDestination = getChosenDestination(allDestinations, destination);
+  const allTypeOffers = getOffersByType(allOffers, type);
+  const chosenOffers = getOffersById(allOffers, type, offers);
+
   const { name, description, pictures } = chosenDestination;
 
   const typeTemplate = createTypeTemplate(EVENT_TYPES, type);
-  const offersTemplate = createOffersTemplate(allOffers.offers, chosenOffers, type);
+  const destinationsTemplate = createDestinationsTemplate(allDestinations, type, name);
+  const timeTemplate = createTimeTemplate(dateFrom, dateTo);
+  const priceTemplate = createPriceTemplate(basePrice);
+  const offersTemplate = createOffersTemplate(allTypeOffers, chosenOffers, type);
+  const descriptionTemplate = createDescriptionTemplate(description, pictures);
 
-  return `<form class="event event--edit" action="#" method="post">
+  return `<li class="trip-events__item">
+  <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
-                  <div class="event__type-wrapper">
-                    <label class="event__type  event__type-btn" for="event-type-toggle-1">
-                      <span class="visually-hidden">Choose event type</span>
-                      <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
-                    </label>
-                    <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
-
-                    <div class="event__type-list">
-                      <fieldset class="event__type-group">
-                        <legend class="visually-hidden">Event type</legend>
                         ${typeTemplate}
-                      </fieldset>
-                    </div>
-                  </div>
-
-                  <div class="event__field-group  event__field-group--destination">
-                    <label class="event__label  event__type-output" for="event-destination-1">
-                      ${type}
-                    </label>
-                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
-                    <datalist id="destination-list-1">
-                    ${allDestinations.map((destination) => `<option value="${destination.name}"></option>`).join('')}
-                    </datalist>
-                  </div>
-
-                  <div class="event__field-group  event__field-group--time">
-                    <label class="visually-hidden" for="event-start-time-1">From</label>
-                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${humanizeEventDate(dateFrom, TIME_FORMAT.fullDateAndTime)}">
-                    &mdash;
-                    <label class="visually-hidden" for="event-end-time-1">To</label>
-                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${humanizeEventDate(dateTo, TIME_FORMAT.fullDateAndTime)}">
-                  </div>
-
-                  <div class="event__field-group  event__field-group--price">
-                    <label class="event__label" for="event-price-1">
-                      <span class="visually-hidden">Price</span>
-                      &euro;
-                    </label>
-                    <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
-                  </div>
-
-                  <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+                        ${destinationsTemplate}
+                        ${timeTemplate}
+                        ${priceTemplate}
+<button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
                   <button class="event__reset-btn" type="reset">Cancel</button>
                 </header>
                 <section class="event__details">
-                  <section class="event__section  event__section--offers">
-                    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-                    <div class="event__available-offers">
-                    ${offersTemplate}
-                    </div>
-                  </section>
-
-                  <section class="event__section  event__section--destination">
-                    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                    <p class="event__destination-description">${description}</p>
-
-                    <div class="event__photos-container">
-                      <div class="event__photos-tape">
-                        ${pictures.map((picture) => `
-                          <img class="event__photo" src = ${picture.src} alt=${picture.description}>
-                        `).join('')}
-                      </div>
-                    </div>
-                  </section>
+                      ${offersTemplate}
+                      ${descriptionTemplate}
                 </section>
-              </form>`;
+              </form>
+              </li>`;
 }
 
-export default class PointAddView extends AbstractView {
-  #event = null;
-  #chosenDestination = null;
-  #chosenOffers = null;
-  #allDestinations = null;
-  #allOffers = null;
+export default class PointAddView extends AbstractStatefulView {
+  #allDestinations = [];
+  #allOffers = [];
+  #handleFormSubmit = null;
+  #handleCancelClick = null;
 
-  constructor({event, chosenDestination, chosenOffers, allDestinations, allOffers}) {
+  #datepicker = null;
+
+  constructor({point, allDestinations, allOffers, onFormSubmit, onDeleteClick}) {
     super();
-    this.#event = event;
-    this.#chosenDestination = chosenDestination;
-    this.#chosenOffers = chosenOffers;
+    this._setState(PointAddView.parsePointToState(point));
     this.#allDestinations = allDestinations;
     this.#allOffers = allOffers;
+    this.#handleFormSubmit = onFormSubmit;
+    this.#handleCancelClick = onDeleteClick;
+
+    this._restoreHandlers();
   }
 
   get template() {
-    return createPointAddingTemplate(this.#event, this.#chosenDestination, this.#chosenOffers, this.#allDestinations, this.#allOffers);
+    return createNewPointTemplate({
+      point: this._state,
+      allDestinations: this.#allDestinations,
+      allOffers: this.#allOffers,
+    });
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this.#datepicker) {
+      this.#datepicker.destroy();
+      this.#datepicker = null;
+    }
+  }
+
+  _restoreHandlers() {
+    this.element.querySelector('.event__save-btn').addEventListener('submit', this.#formSubmitHandler);
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formCancelClickHandler);
+
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
+    this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
+    this.element.querySelector('.event__input--price').addEventListener('input', this.#priceChangeHandler);
+
+    this.#setDatepickers();
+  }
+
+  #setDatepickers() {
+    const commonConfig = {
+      dateFormat: 'd/m/y H:i',
+      enableTime: true,
+      'time_24hr': true
+    };
+
+    this.datepickerFrom = flatpickr(
+      this.element.querySelector('#event-start-time-1'),
+      {
+        ...commonConfig,
+        defaultDate: this._state.dateFrom,
+        onclose: this.#dateFromChangeHandler,
+        maxDate: this._state.dateTo,
+      });
+
+    this.datepickerTo = flatpickr(
+      this.element.querySelector('#event-end-time-1'),
+      {
+        ...commonConfig,
+        defaultDate: this._state.dateTo,
+        onclose: this.#dateToChangeHandler,
+        minDate: this._state.dateFrom,
+      });
+  }
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit(PointAddView.parseStateToPoint(this._state));
+  };
+
+  #formCancelClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleCancelClick(PointAddView.parseStateToPoint(this._state));
+  };
+
+  #destinationChangeHandler = (evt) => {
+    evt.preventDefault();
+    const targetDestination = evt.target.value;
+    const newDestination = this.#allDestinations.find((item) => item.name === targetDestination);
+    this.updateElement({
+      destination: newDestination.id,
+    });
+
+  };
+
+  #typeChangeHandler = (evt) => {
+    evt.preventDefault();
+
+    const targetType = evt.target.value;
+    this.updateElement ({ type: targetType, offers: [] });
+  };
+
+  #priceChangeHandler = (evt) => {
+    evt.preventDefault();
+    const newPrice = evt.target.value;
+    this._setState({
+      basePrice: newPrice
+    });
+  };
+
+  #dateFromChangeHandler = ([userDate]) => {
+    this._setState({
+      dateFrom: userDate
+    });
+  };
+
+  #dateToChangeHandler = ([userDate]) => {
+    this._setState({
+      dateTo: userDate
+    });
+  };
+
+  static parsePointToState(point) {
+    return {...point};
+  }
+
+  static parseStateToPoint(state) {
+    return {...state};
   }
 }

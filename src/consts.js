@@ -1,3 +1,13 @@
+const BLANK_TRIP_POINT = {
+  'basePrice': 0,
+  'dateFrom': '',
+  'dateTo': '',
+  'destination': '',
+  'isFavorite': false,
+  'offers': [],
+  'type': 'flight'
+};
+
 const TIME_FORMAT = {
   fullDateAndTime: 'DD/MM/YY HH:mm',
   eventDate: 'MMM DD',
@@ -51,4 +61,4 @@ const UpdateType = {
 const HOURS = 24;
 const MINUTES = 60;
 
-export {TIME_FORMAT, HOURS, MINUTES, EVENT_TYPES, FilterType, Mode, SortType, UserAction, UpdateType};
+export {BLANK_TRIP_POINT, TIME_FORMAT, HOURS, MINUTES, EVENT_TYPES, FilterType, Mode, SortType, UserAction, UpdateType};
