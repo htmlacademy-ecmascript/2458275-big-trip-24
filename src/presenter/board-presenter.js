@@ -17,7 +17,7 @@ export default class BoardPresenter {
   #filtersModel = null;
 
   #pointsListComponent = new PointsListView();
-  #emptyListComponent = new NoPointView();
+  #emptyListComponent = null;
 
   #pointPresenters = new Map();
   #currentSortType = SortType.DAY;
@@ -61,6 +61,10 @@ export default class BoardPresenter {
   }
 
   #renderEmptyList() {
+    this.#emptyListComponent = new NoPointView ({
+      filterType: this.#filterType
+    });
+
     render(this.#emptyListComponent, this.#pointsContainer);
   }
 
@@ -104,7 +108,11 @@ export default class BoardPresenter {
     this.#pointPresenters.clear();
 
     remove(this.#sortComponent);
-    remove(this.#emptyListComponent);
+
+    if (this.#emptyListComponent) {
+      remove(this.#emptyListComponent);
+    }
+
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
     }
