@@ -1,8 +1,8 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {TIME_FORMAT} from '../consts.js';
-import {humanizeEventDate, getFormattedEventDuration} from '../utils/event.js';
+import {humanizeEventDate, getFormattedEventDuration} from '../utils/point.js';
 
-function createEventTemplate(event, destination, offers) {
+function createPointTemplate(event, destination, offers) {
   const { basePrice, dateFrom, dateTo, isFavorite, type } = event;
 
   return `<li class="trip-events__item">
@@ -46,7 +46,7 @@ function createEventTemplate(event, destination, offers) {
             </li>`;
 }
 
-export default class EventPointView extends AbstractView {
+export default class pointView extends AbstractView {
   #point = null;
   #destination = null;
   #offers = null;
@@ -66,7 +66,7 @@ export default class EventPointView extends AbstractView {
   }
 
   get template() {
-    return createEventTemplate(this.#point, this.#destination, this.#offers);
+    return createPointTemplate(this.#point, this.#destination, this.#offers);
   }
 
   #editOpenButtonHandler = (evt) => {

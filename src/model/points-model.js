@@ -6,7 +6,7 @@ const POINTS_COUNT = 6;
 export default class PointsModel extends Observable {
   #points = Array.from({length: POINTS_COUNT}, getRandomPoint);
 
-  getPoints() {
+  get points() {
     return this.#points;
   }
 

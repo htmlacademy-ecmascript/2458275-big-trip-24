@@ -2,25 +2,26 @@ import FiltersPresenter from './presenter/filters-presenter.js';
 import BoardPresenter from './presenter/board-presenter.js';
 
 import PointsModel from './model/points-model.js';
-import FilterModel from './model/filter-model.js';
+import FiltersModel from './model/filters-model.js';
 
-const tripFiltersElement = document.querySelector(
+const filtersElement = document.querySelector(
   '.trip-controls__filters');
-const tripEventsElement = document.querySelector('.trip-events');
+const pointsElement = document.querySelector('.trip-events');
 
 const pointsModel = new PointsModel();
-const filterModel = new FilterModel();
+const filtersModel = new FiltersModel();
 
 
 const filtersPresenter = new FiltersPresenter({
-  filtersContainer: tripFiltersElement,
-  filterModel,
+  filtersContainer: filtersElement,
+  filtersModel,
   pointsModel,
 });
 
 const boardPresenter = new BoardPresenter({
-  eventsContainer: tripEventsElement,
+  pointsContainer: pointsElement,
   pointsModel,
+  filtersModel,
 });
 
 filtersPresenter.init();

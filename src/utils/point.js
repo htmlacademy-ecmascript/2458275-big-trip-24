@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import {HOURS, MINUTES} from '../consts.js';
-import {capitalize, padToTwoDigits} from '../utils/utils.js';
+import {capitalize, padToTwoDigits} from './utils.js';
 
 
 const getOffersByType = (allOffers, type) => allOffers.find((offer) => offer.type === type).offers;
@@ -10,6 +10,8 @@ const getOffersById = (allOffers, type, itemsIds) => {
   const offersType = getOffersByType(allOffers, type);
   return offersType.filter((item) => itemsIds.includes(item.id));
 };
+
+const getChosenDestination = (allDestinations, destination) => allDestinations.find((item) => item.id === destination);
 
 function createOffersTemplate(offers, chosenOffers, type) {
   return offers.map((offer) => `<div class="event__offer-selector">
@@ -90,4 +92,4 @@ function isDatesEqual(dateA, dateB) {
 }
 
 
-export {createOffersTemplate, createTypeTemplate, humanizeEventDate, getFormattedEventDuration, isFuturePoint, isPresentPoint, isPastPoint, sortPointsByDay, sortPointsByDuration, sortPointsByPrice, getOffersByType, getOffersById, isDatesEqual};
+export {createOffersTemplate, createTypeTemplate, humanizeEventDate, getFormattedEventDuration, isFuturePoint, isPresentPoint, isPastPoint, sortPointsByDay, sortPointsByDuration, sortPointsByPrice, getOffersByType, getOffersById, getChosenDestination, isDatesEqual};

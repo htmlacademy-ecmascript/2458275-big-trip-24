@@ -1,8 +1,8 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {TIME_FORMAT, EVENT_TYPES} from '../consts.js';
-import {createOffersTemplate, createTypeTemplate, humanizeEventDate} from '../utils/event.js';
+import {createOffersTemplate, createTypeTemplate, humanizeEventDate} from '../utils/point.js';
 
-function createEventAddingTemplate(event, chosenDestination, chosenOffers, allDestinations, allOffers) {
+function createPointAddingTemplate(event, chosenDestination, chosenOffers, allDestinations, allOffers) {
   const { dateFrom, dateTo, type } = event;
   const { name, description, pictures } = chosenDestination;
 
@@ -80,7 +80,7 @@ function createEventAddingTemplate(event, chosenDestination, chosenOffers, allDe
               </form>`;
 }
 
-export default class EventAddView extends AbstractView {
+export default class PointAddView extends AbstractView {
   #event = null;
   #chosenDestination = null;
   #chosenOffers = null;
@@ -97,6 +97,6 @@ export default class EventAddView extends AbstractView {
   }
 
   get template() {
-    return createEventAddingTemplate(this.#event, this.#chosenDestination, this.#chosenOffers, this.#allDestinations, this.#allOffers);
+    return createPointAddingTemplate(this.#event, this.#chosenDestination, this.#chosenOffers, this.#allDestinations, this.#allOffers);
   }
 }
