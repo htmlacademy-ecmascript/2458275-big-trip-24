@@ -14,6 +14,7 @@ const filterModel = new FilterModel();
 
 const filtersPresenter = new FiltersPresenter({
   filtersContainer: tripFiltersElement,
+  filterModel,
   pointsModel,
 });
 
