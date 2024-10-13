@@ -78,7 +78,7 @@ export default class PointAddView extends AbstractStatefulView {
   }
 
   _restoreHandlers() {
-    this.element.querySelector('.event__save-btn').addEventListener('submit', this.#formSubmitHandler);
+    this.element.addEventListener('submit', this.#formSubmitHandler);
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formCancelClickHandler);
 
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
@@ -100,7 +100,7 @@ export default class PointAddView extends AbstractStatefulView {
       {
         ...commonConfig,
         defaultDate: this._state.dateFrom,
-        onclose: this.#dateFromChangeHandler,
+        onChange: this.#dateFromChangeHandler,
       });
 
     this.datepickerTo = flatpickr(
@@ -108,7 +108,7 @@ export default class PointAddView extends AbstractStatefulView {
       {
         ...commonConfig,
         defaultDate: this._state.dateTo,
-        onclose: this.#dateToChangeHandler,
+        onChange: this.#dateToChangeHandler,
         minDate: this._state.dateFrom,
       });
   }
