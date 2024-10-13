@@ -16,6 +16,8 @@ export default class BoardPresenter {
   #pointsModel = null;
   #sortComponent = null;
   #filtersModel = null;
+  #offersModel = null;
+  #destinationsModel = null;
 
   #pointsListComponent = new PointsListView();
   #emptyListComponent = null;
@@ -25,17 +27,20 @@ export default class BoardPresenter {
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
 
-  constructor({ pointsContainer, pointsModel, filtersModel, onNewPointDestroy }) {
+  constructor({ pointsContainer, pointsModel, offersModel, destinationsModel, filtersModel, onNewPointDestroy }) {
     this.#pointsContainer = pointsContainer;
     this.#pointsModel = pointsModel;
+    this.#offersModel = offersModel;
+    this.#destinationsModel = destinationsModel;
     this.#filtersModel = filtersModel;
 
     this.#newPointPresenter = new NewPointPresenter ({
       pointsListContainer: this.#pointsListComponent.element,
       onDataChange: this.#handleViewAction,
-      onDestroy: onNewPointDestroy
+      onDestroy: onNewPointDestroy,
+      offersModel,
+      destinationsModel
     });
-
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
     this.#filtersModel.addObserver(this.#handleModelEvent);
@@ -54,7 +59,7 @@ export default class BoardPresenter {
       case SortType.PRICE:
         return filteredPoints.sort(sortPointsByPrice);
     }
-    return filteredPoints;
+    return filteredPoints.sort(sortPointsByDay);
   }
 
   init() {

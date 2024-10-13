@@ -49,13 +49,13 @@ export default class PointAddView extends AbstractStatefulView {
 
   #datepicker = null;
 
-  constructor({point, allDestinations, allOffers, onFormSubmit, onDeleteClick}) {
+  constructor({point, allDestinations, allOffers, onFormSubmit, onCancelClick}) {
     super();
     this._setState(PointAddView.parsePointToState(point));
     this.#allDestinations = allDestinations;
     this.#allOffers = allOffers;
     this.#handleFormSubmit = onFormSubmit;
-    this.#handleCancelClick = onDeleteClick;
+    this.#handleCancelClick = onCancelClick;
 
     this._restoreHandlers();
   }
@@ -101,7 +101,6 @@ export default class PointAddView extends AbstractStatefulView {
         ...commonConfig,
         defaultDate: this._state.dateFrom,
         onclose: this.#dateFromChangeHandler,
-        maxDate: this._state.dateTo,
       });
 
     this.datepickerTo = flatpickr(
@@ -125,7 +124,6 @@ export default class PointAddView extends AbstractStatefulView {
   };
 
   #destinationChangeHandler = (evt) => {
-    evt.preventDefault();
     const targetDestination = evt.target.value;
     const newDestination = this.#allDestinations.find((item) => item.name === targetDestination);
     this.updateElement({
@@ -135,14 +133,11 @@ export default class PointAddView extends AbstractStatefulView {
   };
 
   #typeChangeHandler = (evt) => {
-    evt.preventDefault();
-
     const targetType = evt.target.value;
     this.updateElement ({ type: targetType, offers: [] });
   };
 
   #priceChangeHandler = (evt) => {
-    evt.preventDefault();
     const newPrice = evt.target.value;
     this._setState({
       basePrice: newPrice
@@ -153,6 +148,7 @@ export default class PointAddView extends AbstractStatefulView {
     this._setState({
       dateFrom: userDate
     });
+    this.#setDatepickers();
   };
 
   #dateToChangeHandler = ([userDate]) => {

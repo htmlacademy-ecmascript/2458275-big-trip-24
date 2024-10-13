@@ -1,11 +1,11 @@
 import { nanoid } from 'nanoid';
 import {isEscapeKey} from '../utils/utils.js';
 import {render, remove, RenderPosition} from '../framework/render.js';
-import { UserAction, UpdateType, BLANK_TRIP_POINT } from '../consts.js';
+import { UserAction, UpdateType, BLANK_POINT } from '../consts.js';
 import PointAddView from '../view/point-add-view.js';
 
 export default class NewPointPresenter {
-  #point = BLANK_TRIP_POINT;
+  #point = BLANK_POINT;
   #pointsListContainer = null;
   #handleDataChange = null;
   #handleDestroy = null;
@@ -29,8 +29,8 @@ export default class NewPointPresenter {
 
     this.#pointAddComponent = new PointAddView ({
       point: this.#point,
-      destinationsModel: this.#destinationsModel,
-      offersModel: this.#offersModel,
+      allDestinations: this.#destinationsModel.getDestinations(),
+      allOffers: this.#offersModel.getOffers(),
       onFormSubmit: this.#handleFormSubmit,
       onCancelClick: this.#handleCancelClick
     });

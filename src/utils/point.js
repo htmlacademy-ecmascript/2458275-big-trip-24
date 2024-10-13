@@ -11,7 +11,7 @@ const getOffersById = (allOffers, type, itemsIds) => {
   return offersType.filter((item) => itemsIds.includes(item.id));
 };
 
-const getChosenDestination = (allDestinations, destination) => allDestinations.find((item) => item.id === destination);
+const getChosenDestination = (allDestinations, destination) => destination ? allDestinations.find((item) => item.id === destination) : '';
 
 function humanizeEventDate(eventDate, format) {
   return dayjs(eventDate).format(format);

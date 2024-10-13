@@ -31,7 +31,7 @@ function createDestinationsTemplate (allDestinations, chosenType, name) {
   <label class="event__label  event__type-output" for="event-destination-1">
     ${chosenType}
   </label>
-  <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
+  <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name ? name : ''}" list="destination-list-1">
   <datalist id="destination-list-1">
   ${destinationsList}
   </datalist>
@@ -40,11 +40,11 @@ function createDestinationsTemplate (allDestinations, chosenType, name) {
 
 function createTimeTemplate(dateFrom, dateTo) {
   return `<div class="event__field-group  event__field-group--time">
-  <label class="visually-hidden" for="event-start-time-1">${dateFrom}</label>
-  <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${humanizeEventDate(dateFrom, TIME_FORMAT.fullDateAndTime)}">
+  <label class="visually-hidden" for="event-start-time-1">${dateFrom ? dateFrom : ''}</label>
+  <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFrom ? humanizeEventDate(dateFrom, TIME_FORMAT.fullDateAndTime) : ''}">
   &mdash;
-  <label class="visually-hidden" for="event-end-time-1">${dateTo}</label>
-  <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${humanizeEventDate(dateTo, TIME_FORMAT.fullDateAndTime)}">
+  <label class="visually-hidden" for="event-end-time-1">${dateTo ? dateTo : ''}</label>
+  <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateTo ? humanizeEventDate(dateTo, TIME_FORMAT.fullDateAndTime) : ''}">
 </div>`;
 }
 
@@ -78,13 +78,13 @@ function createOffersTemplate(offers, chosenOffers, type) {
 }
 
 function createDescriptionTemplate(description, pictures) {
-  return `${description || pictures.length > 0 ? `
+  return `${description || (pictures && pictures.length > 0) ? `
     <section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         ${description
     ? (`<p class="event__destination-description">${description}</p>`)
     : ''}
-        ${pictures.length > 0
+        ${pictures && pictures.length > 0
     ? `<div class="event__photos-container">
         <div class="event__photos-tape">
           ${pictures.map((picture) => `

@@ -1,4 +1,5 @@
-const BLANK_TRIP_POINT = {
+const BLANK_POINT = {
+  'id': '',
   'basePrice': 0,
   'dateFrom': '',
   'dateTo': '',
@@ -47,9 +48,9 @@ const SortType = {
 };
 
 const UserAction = {
-  UPDATE_POINT: 'UPDATE_ POINT',
-  ADD_POINT: 'ADD_ POINT',
-  DELETE_POINT: 'DELETE_ POINT',
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT',
 };
 
 const UpdateType = {
@@ -61,4 +62,4 @@ const UpdateType = {
 const HOURS = 24;
 const MINUTES = 60;
 
-export {BLANK_TRIP_POINT, TIME_FORMAT, HOURS, MINUTES, EVENT_TYPES, FilterType, Mode, SortType, UserAction, UpdateType};
+export {BLANK_POINT, TIME_FORMAT, HOURS, MINUTES, EVENT_TYPES, FilterType, Mode, SortType, UserAction, UpdateType};

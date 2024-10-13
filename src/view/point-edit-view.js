@@ -140,7 +140,6 @@ export default class PointEditView extends AbstractStatefulView {
   };
 
   #destinationChangeHandler = (evt) => {
-    evt.preventDefault();
     const targetDestination = evt.target.value;
     const newDestination = this.#allDestinations.find((item) => item.name === targetDestination);
     this.updateElement({
@@ -150,8 +149,6 @@ export default class PointEditView extends AbstractStatefulView {
   };
 
   #typeChangeHandler = (evt) => {
-    evt.preventDefault();
-
     const targetType = evt.target.value;
     this.updateElement ({ type: targetType, offers: [] });
   };
