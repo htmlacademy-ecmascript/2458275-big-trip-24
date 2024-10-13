@@ -111,8 +111,7 @@ export default class PointEditView extends AbstractStatefulView {
       {
         ...commonConfig,
         defaultDate: this._state.dateFrom,
-        onclose: this.#dateFromChangeHandler,
-        maxDate: this._state.dateTo,
+        onChange: this.#dateFromChangeHandler,
       });
 
     this.datepickerTo = flatpickr(
@@ -120,7 +119,7 @@ export default class PointEditView extends AbstractStatefulView {
       {
         ...commonConfig,
         defaultDate: this._state.dateTo,
-        onclose: this.#dateToChangeHandler,
+        onChange: this.#dateToChangeHandler,
         minDate: this._state.dateFrom,
       });
   }
@@ -158,7 +157,6 @@ export default class PointEditView extends AbstractStatefulView {
   };
 
   #priceChangeHandler = (evt) => {
-    evt.preventDefault();
     const newPrice = evt.target.value;
     this._setState({
       basePrice: newPrice
@@ -169,6 +167,7 @@ export default class PointEditView extends AbstractStatefulView {
     this._setState({
       dateFrom: userDate
     });
+    this.#setDatepickers();
   };
 
   #dateToChangeHandler = ([userDate]) => {
