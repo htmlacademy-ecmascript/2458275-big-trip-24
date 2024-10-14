@@ -11,6 +11,18 @@ const getOffersById = (allOffers, type, itemsIds) => {
   return offersType.filter((item) => itemsIds.includes(item.id));
 };
 
+function getOfferIdPart (title) {
+  const offerTitleMainWords = title.split(/[,' ]+/).filter((word) => word.length >= 3);
+
+  let idPart = offerTitleMainWords.length >= 3 ? offerTitleMainWords.slice(1, 5).join('-').toLowerCase() : offerTitleMainWords.join('-').toLowerCase();
+  if (idPart.includes('the-')) {
+    idPart = idPart.replace(/the-/g, '');
+  }
+
+  return idPart;
+}
+
+
 const getChosenDestination = (allDestinations, destination) => destination ? allDestinations.find((item) => item.id === destination) : '';
 
 function humanizeEventDate(eventDate, format) {
@@ -74,4 +86,4 @@ function isDatesEqual(dateA, dateB) {
 }
 
 
-export {humanizeEventDate, getFormattedEventDuration, isFuturePoint, isPresentPoint, isPastPoint, sortPointsByDay, sortPointsByDuration, sortPointsByPrice, getOffersByType, getOffersById, getChosenDestination, isDatesEqual};
+export {humanizeEventDate, getFormattedEventDuration, isFuturePoint, isPresentPoint, isPastPoint, sortPointsByDay, sortPointsByDuration, sortPointsByPrice, getOffersByType, getOffersById, getOfferIdPart, getChosenDestination, isDatesEqual};

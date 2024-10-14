@@ -19,7 +19,7 @@ function createPointEditingTemplate({point, allDestinations, allOffers}) {
   const destinationsTemplate = createDestinationsTemplate(allDestinations, type, name);
   const timeTemplate = createTimeTemplate(dateFrom, dateTo);
   const priceTemplate = createPriceTemplate(basePrice);
-  const offersTemplate = createOffersTemplate(allTypeOffers, chosenOffers, type);
+  const offersTemplate = createOffersTemplate(allTypeOffers, chosenOffers);
   const descriptionTemplate = createDescriptionTemplate(description, pictures);
 
   return `<li class="trip-events__item">
@@ -95,6 +95,10 @@ export default class PointEditView extends AbstractStatefulView {
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
     this.element.querySelector('.event__input--price').addEventListener('input', this.#priceChangeHandler);
+
+    if (this.element.querySelector('.event__section--offers')) {
+      this.element.querySelector('.event__section--offers').addEventListener('change', this.#offersChangeHandler);
+    }
 
     this.#setDatepickers();
   }
@@ -172,6 +176,14 @@ export default class PointEditView extends AbstractStatefulView {
       dateTo: userDate
     });
   };
+
+  #offersChangeHandler = () => {
+    const checkedOffers = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
+    this._setState({
+      offers: checkedOffers.map((item) => item.dataset.offerId)
+    });
+  };
+
 
   static parsePointToState(point) {
     return {...point};

@@ -25,7 +25,7 @@ export default class FiltersPresenter {
       type: filterType,
       count: filterAction(points).length
     }),
-  );
+    );
   }
 
   init() {
