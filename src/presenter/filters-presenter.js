@@ -1,6 +1,6 @@
 import {render, replace, remove} from '../framework/render.js';
 import FiltersView from '../view/filters-view.js';
-import {UpdateType} from '../consts.js';
+import {UpdateType, FilterType} from '../consts.js';
 import { filter } from '../utils/filter';
 
 export default class FiltersPresenter {
@@ -21,9 +21,9 @@ export default class FiltersPresenter {
 
   get filters() {
     const points = this.#pointsModel.points;
-    return Object.entries(filter).map(([filterType, filterAction]) => ({
-      type: filterType,
-      count: filterAction(points).length
+    return Object.values(FilterType).map((type) => ({
+      type,
+      count: filter[type](points).length
     }),
     );
   }

@@ -62,7 +62,7 @@ function createPriceTemplate(basePrice) {
 function createOffersTemplate(offers, chosenOffers) {
 
   const offersList = offers.map(({title, price, id}) => `<div class="event__offer-selector">
-                      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${getOfferIdPart(title)}-1" type="checkbox" name="event-offer-${getOfferIdPart(title)}}" data-offer-id="${id}" ${chosenOffers.includes(id) ? 'checked' : ''}>
+                      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${getOfferIdPart(title)}-1" type="checkbox" name="event-offer-${getOfferIdPart(title)}" data-offer-id="${id}" ${chosenOffers.includes(id) ? 'checked' : ''}>
                       <label class="event__offer-label" for="event-offer-${getOfferIdPart(title)}-1">
                         <span class="event__offer-title">${title}</span>
                         &plus;&euro;&nbsp;
