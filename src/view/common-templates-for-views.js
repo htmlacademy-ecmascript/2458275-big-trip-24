@@ -59,10 +59,10 @@ function createPriceTemplate(basePrice) {
 </div>`;
 }
 
-function createOffersTemplate(offers, chosenOffers) {
+function createOffersTemplate(allTypeOffers, offers) {
 
-  const offersList = offers.map(({title, price, id}) => `<div class="event__offer-selector">
-                      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${getOfferIdPart(title)}-1" type="checkbox" name="event-offer-${getOfferIdPart(title)}" data-offer-id="${id}" ${chosenOffers.includes(id) ? 'checked' : ''}>
+  const offersList = allTypeOffers.map(({title, price, id}) => `<div class="event__offer-selector">
+                      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${getOfferIdPart(title)}-1" type="checkbox" name="event-offer-${getOfferIdPart(title)}" data-offer-id="${id}" ${offers.includes(id) ? 'checked' : ''}>
                       <label class="event__offer-label" for="event-offer-${getOfferIdPart(title)}-1">
                         <span class="event__offer-title">${title}</span>
                         &plus;&euro;&nbsp;
@@ -70,7 +70,7 @@ function createOffersTemplate(offers, chosenOffers) {
                       </label>
                     </div>`).join('');
 
-  return `${offers.length > 0 ? `<section class="event__section  event__section--offers">
+  return `${allTypeOffers.length > 0 ? `<section class="event__section  event__section--offers">
                       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                       <div class="event__available-offers">

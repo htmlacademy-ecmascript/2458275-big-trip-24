@@ -11,7 +11,6 @@ function createPointEditingTemplate({point, allDestinations, allOffers}) {
   const { basePrice, dateFrom, dateTo, type, destination, offers } = point;
   const chosenDestination = getChosenDestination(allDestinations, destination);
   const allTypeOffers = getOffersByType(allOffers, type);
-  const chosenOffers = getOffersById(allOffers, type, offers);
 
   const { name, description, pictures } = chosenDestination;
 
@@ -19,7 +18,7 @@ function createPointEditingTemplate({point, allDestinations, allOffers}) {
   const destinationsTemplate = createDestinationsTemplate(allDestinations, type, name);
   const timeTemplate = createTimeTemplate(dateFrom, dateTo);
   const priceTemplate = createPriceTemplate(basePrice);
-  const offersTemplate = createOffersTemplate(allTypeOffers, chosenOffers);
+  const offersTemplate = createOffersTemplate(allTypeOffers, offers);
   const descriptionTemplate = createDescriptionTemplate(description, pictures);
 
   return `<li class="trip-events__item">
