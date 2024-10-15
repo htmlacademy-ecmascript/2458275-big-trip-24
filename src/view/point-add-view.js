@@ -1,5 +1,5 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import {EVENT_TYPES} from '../consts.js';
+import {EVENT_TYPES} from '../utils/consts.js';
 import {getOffersByType, getDestinationById} from '../utils/point.js';
 import {createTypeTemplate, createDestinationsTemplate, createTimeTemplate, createPriceTemplate, createOffersTemplate, createDescriptionTemplate} from './common-templates-for-views.js';
 

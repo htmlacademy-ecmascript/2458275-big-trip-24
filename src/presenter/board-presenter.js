@@ -5,7 +5,7 @@ import PointPresenter from './point-presenter.js';
 import NewPointPresenter from './new-point-presenter.js';
 import DestinationsModel from '../model/destinations-model.js';
 import OffersModel from '../model/offers-model.js';
-import {SortType, UpdateType, UserAction, FilterType} from '../consts.js';
+import {SortType, UpdateType, UserAction, FilterType} from '../utils/consts.js';
 import {sortPointsByDay, sortPointsByDuration, sortPointsByPrice} from '../utils/point.js';
 import {render, remove} from '../framework/render.js';
 import {filter} from '../utils/filter.js';

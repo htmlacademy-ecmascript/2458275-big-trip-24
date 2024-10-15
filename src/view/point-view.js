@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {TIME_FORMAT} from '../consts.js';
+import {TIME_FORMAT} from '../utils/consts.js';
 import {humanizeEventDate, getFormattedEventDuration, getDestinationById, getOffersById} from '../utils/point.js';
 
 function createPointTemplate({point, allDestinations, allOffers}) {

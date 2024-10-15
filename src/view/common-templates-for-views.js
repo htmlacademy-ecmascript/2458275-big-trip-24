@@ -1,6 +1,6 @@
 import {capitalize} from '../utils/utils.js';
 import {getOfferInputUniqueDetails, humanizeEventDate} from '../utils/point.js';
-import {TIME_FORMAT} from '../consts.js';
+import {TIME_FORMAT} from '../utils/consts.js';
 
 
 function createTypeTemplate(allTypes, chosenType) {

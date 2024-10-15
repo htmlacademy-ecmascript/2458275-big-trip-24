@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {HOURS, MINUTES, MIN_WORD_LENGTH, MAIN_WORDS_COUNT} from '../consts.js';
+import {HOURS, MINUTES, MIN_WORD_LENGTH, MAIN_WORDS_COUNT} from './consts.js';
 import {padToTwoDigits} from './utils.js';
 
 
