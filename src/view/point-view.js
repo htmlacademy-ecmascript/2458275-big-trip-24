@@ -1,9 +1,12 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {TIME_FORMAT} from '../consts.js';
-import {humanizeEventDate, getFormattedEventDuration} from '../utils/point.js';
+import {humanizeEventDate, getFormattedEventDuration, getDestinationById, getOffersById} from '../utils/point.js';
 
-function createPointTemplate(event, destination, offers) {
-  const { basePrice, dateFrom, dateTo, isFavorite, type } = event;
+function createPointTemplate({point, allDestinations, allOffers}) {
+  const { basePrice, dateFrom, dateTo, isFavorite, type, destination, offers } = point;
+
+  const chosenDestination = getDestinationById(allDestinations, destination);
+  const chosenOffers = getOffersById(allOffers, type, offers);
 
   return `<li class="trip-events__item">
   <div class="event">
@@ -11,12 +14,12 @@ function createPointTemplate(event, destination, offers) {
                 <div class="event__type">
                   <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
                 </div>
-                <h3 class="event__title">${type} ${destination.name}</h3>
+                <h3 class="event__title">${type} ${chosenDestination.name}</h3>
                 <div class="event__schedule">
                   <p class="event__time">
                     <time class="event__start-time" datetime="${dateFrom}">${humanizeEventDate(dateFrom, TIME_FORMAT.eventTime)}</time>
                     &mdash;
-                    <time class="event__end-time" datetime="${dateTo}">${humanizeEventDate(event.dateTo, TIME_FORMAT.eventTime)}</time>
+                    <time class="event__end-time" datetime="${dateTo}">${humanizeEventDate(point.dateTo, TIME_FORMAT.eventTime)}</time>
                   </p>
                   <p class="event__duration">${getFormattedEventDuration (dateFrom, dateTo)}</p>
                 </div>
@@ -25,7 +28,7 @@ function createPointTemplate(event, destination, offers) {
                 </p>
                 <h4 class="visually-hidden">Offers:</h4>
                 <ul class="event__selected-offers">
-                ${offers.map((offer) => `
+                ${chosenOffers.map((offer) => `
                   <li class="event__offer">
                     <span class="event__offer-title">${offer.title}</span>
                     &plus;&euro;&nbsp;
@@ -48,16 +51,16 @@ function createPointTemplate(event, destination, offers) {
 
 export default class pointView extends AbstractView {
   #point = null;
-  #destination = null;
-  #offers = null;
+  #allDestinations = [];
+  #allOffers = [];
   #handleEditOpenButton = null;
   #handleFavoriteClick = null;
 
-  constructor({point, destination, offers, onEditOpenButtonClick, onFavoriteClick}) {
+  constructor({point, allDestinations, allOffers, onEditOpenButtonClick, onFavoriteClick}) {
     super();
     this.#point = point;
-    this.#destination = destination;
-    this.#offers = offers;
+    this.#allDestinations = allDestinations;
+    this.#allOffers = allOffers;
     this.#handleEditOpenButton = onEditOpenButtonClick;
     this.#handleFavoriteClick = onFavoriteClick;
 
@@ -66,7 +69,11 @@ export default class pointView extends AbstractView {
   }
 
   get template() {
-    return createPointTemplate(this.#point, this.#destination, this.#offers);
+    return createPointTemplate({
+      point: this.#point,
+      allDestinations: this.#allDestinations,
+      allOffers: this.#allOffers,
+    });
   }
 
   #editOpenButtonHandler = (evt) => {

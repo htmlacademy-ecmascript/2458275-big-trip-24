@@ -1,6 +1,6 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {EVENT_TYPES} from '../consts.js';
-import {getOffersByType, getOffersById, getChosenDestination} from '../utils/point.js';
+import {getOffersByType, getDestinationById} from '../utils/point.js';
 import {createTypeTemplate, createDestinationsTemplate, createTimeTemplate, createPriceTemplate, createOffersTemplate, createDescriptionTemplate} from './common-templates-for-views.js';
 import flatpickr from 'flatpickr';
 
@@ -9,7 +9,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 
 function createPointEditingTemplate({point, allDestinations, allOffers}) {
   const { basePrice, dateFrom, dateTo, type, destination, offers } = point;
-  const chosenDestination = getChosenDestination(allDestinations, destination);
+  const chosenDestination = getDestinationById(allDestinations, destination);
   const allTypeOffers = getOffersByType(allOffers, type);
 
   const { name, description, pictures } = chosenDestination;

@@ -29,8 +29,8 @@ export default class NewPointPresenter {
 
     this.#pointAddComponent = new PointAddView ({
       point: this.#point,
-      allDestinations: this.#destinationsModel.getDestinations(),
-      allOffers: this.#offersModel.getOffers(),
+      allDestinations: this.#destinationsModel.destinations,
+      allOffers: this.#offersModel.offers,
       onFormSubmit: this.#handleFormSubmit,
       onCancelClick: this.#handleCancelClick
     });

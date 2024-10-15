@@ -1,5 +1,5 @@
 import {capitalize} from '../utils/utils.js';
-import {getOfferIdPart, humanizeEventDate} from '../utils/point.js';
+import {getOfferInputUniqueDetails, humanizeEventDate} from '../utils/point.js';
 import {TIME_FORMAT} from '../consts.js';
 
 
@@ -62,8 +62,8 @@ function createPriceTemplate(basePrice) {
 function createOffersTemplate(allTypeOffers, offers) {
 
   const offersList = allTypeOffers.map(({title, price, id}) => `<div class="event__offer-selector">
-                      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${getOfferIdPart(title)}-1" type="checkbox" name="event-offer-${getOfferIdPart(title)}" data-offer-id="${id}" ${offers.includes(id) ? 'checked' : ''}>
-                      <label class="event__offer-label" for="event-offer-${getOfferIdPart(title)}-1">
+                      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${getOfferInputUniqueDetails(title)}-1" type="checkbox" name="event-offer-${getOfferInputUniqueDetails(title)}" data-offer-id="${id}" ${offers.includes(id) ? 'checked' : ''}>
+                      <label class="event__offer-label" for="event-offer-${getOfferInputUniqueDetails(title)}-1">
                         <span class="event__offer-title">${title}</span>
                         &plus;&euro;&nbsp;
                         <span class="event__offer-price">${price}</span>
