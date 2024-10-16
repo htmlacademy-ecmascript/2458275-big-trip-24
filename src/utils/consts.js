@@ -1,5 +1,5 @@
 const AUTHORIZATION = 'Basic tmy8qnrywc9dgq';
-const END_POINT = 'https://24.objects.htmlacademy.pro/task-manager';
+const END_POINT = 'https://24.objects.htmlacademy.pro/big-trip';
 
 const HOURS = 24;
 const MINUTES = 60;

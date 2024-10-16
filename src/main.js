@@ -19,10 +19,15 @@ const pointsModel = new PointsModel({
   pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
 });
 
-const filtersModel = new FiltersModel();
-const offersModel = new OffersModel();
-const destinationsModel = new DestinationsModel();
+const offersModel = new OffersModel({
+  pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
+});
 
+const destinationsModel = new DestinationsModel({
+  pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
+});
+
+const filtersModel = new FiltersModel();
 
 const filtersPresenter = new FiltersPresenter({
   filtersContainer: filtersElement,
@@ -56,3 +61,7 @@ render(newPointButtonComponent, tripMainElement);
 
 filtersPresenter.init();
 boardPresenter.init();
+pointsModel.init();
+destinationsModel.init();
+offersModel.init();
+
