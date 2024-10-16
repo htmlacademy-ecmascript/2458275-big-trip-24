@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {TIME_FORMAT} from '../utils/consts.js';
+import {TimeFormatType} from '../utils/consts.js';
 import {humanizeEventDate, getFormattedEventDuration, getDestinationById, getOffersById} from '../utils/point.js';
 
 function createPointTemplate({point, allDestinations, allOffers}) {
@@ -10,16 +10,16 @@ function createPointTemplate({point, allDestinations, allOffers}) {
 
   return `<li class="trip-events__item">
   <div class="event">
-      <time class="event__date" datetime="${humanizeEventDate(dateFrom, TIME_FORMAT.fullEventDate)}">${humanizeEventDate(dateFrom, TIME_FORMAT.eventDate)}</time>
+      <time class="event__date" datetime="${humanizeEventDate(dateFrom, TimeFormatType.FULL_DATE)}">${humanizeEventDate(dateFrom, TimeFormatType.SHORT_DATE)}</time>
                 <div class="event__type">
                   <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
                 </div>
                 <h3 class="event__title">${type} ${chosenDestination.name}</h3>
                 <div class="event__schedule">
                   <p class="event__time">
-                    <time class="event__start-time" datetime="${dateFrom}">${humanizeEventDate(dateFrom, TIME_FORMAT.eventTime)}</time>
+                    <time class="event__start-time" datetime="${dateFrom}">${humanizeEventDate(dateFrom, TimeFormatType.TIME)}</time>
                     &mdash;
-                    <time class="event__end-time" datetime="${dateTo}">${humanizeEventDate(point.dateTo, TIME_FORMAT.eventTime)}</time>
+                    <time class="event__end-time" datetime="${dateTo}">${humanizeEventDate(point.dateTo, TimeFormatType.TIME)}</time>
                   </p>
                   <p class="event__duration">${getFormattedEventDuration (dateFrom, dateTo)}</p>
                 </div>

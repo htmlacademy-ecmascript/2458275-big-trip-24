@@ -1,6 +1,6 @@
 import {capitalize} from '../utils/utils.js';
 import {getOfferInputUniqueDetails, humanizeEventDate} from '../utils/point.js';
-import {TIME_FORMAT} from '../utils/consts.js';
+import {TimeFormatType} from '../utils/consts.js';
 
 
 function createTypeTemplate(allTypes, chosenType) {
@@ -42,10 +42,10 @@ function createDestinationsTemplate (allDestinations, chosenType, name) {
 function createTimeTemplate(dateFrom, dateTo) {
   return `<div class="event__field-group  event__field-group--time">
   <label class="visually-hidden" for="event-start-time-1">${dateFrom ? dateFrom : ''}</label>
-  <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFrom ? humanizeEventDate(dateFrom, TIME_FORMAT.fullDateAndTime) : ''}">
+  <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFrom ? humanizeEventDate(dateFrom, TimeFormatType.FULL_DATE_AND_TIME) : ''}">
   &mdash;
   <label class="visually-hidden" for="event-end-time-1">${dateTo ? dateTo : ''}</label>
-  <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateTo ? humanizeEventDate(dateTo, TIME_FORMAT.fullDateAndTime) : ''}">
+  <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateTo ? humanizeEventDate(dateTo, TimeFormatType.FULL_DATE_AND_TIME) : ''}">
 </div>`;
 }
 
