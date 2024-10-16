@@ -1,4 +1,5 @@
 import {render} from './framework/render.js';
+import {AUTHORIZATION, END_POINT} from './utils/consts.js';
 import FiltersPresenter from './presenter/filters-presenter.js';
 import BoardPresenter from './presenter/board-presenter.js';
 
@@ -7,13 +8,17 @@ import FiltersModel from './model/filters-model.js';
 import OffersModel from './model/offers-model.js';
 import DestinationsModel from './model/destinations-model.js';
 import NewPointButtonView from './view/new-point-button-view.js';
+import PointsApiService from './points-api-service.js';
 
 const filtersElement = document.querySelector(
   '.trip-controls__filters');
 const pointsElement = document.querySelector('.trip-events');
 const tripMainElement = document.querySelector('.trip-main');
 
-const pointsModel = new PointsModel();
+const pointsModel = new PointsModel({
+  pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
+});
+
 const filtersModel = new FiltersModel();
 const offersModel = new OffersModel();
 const destinationsModel = new DestinationsModel();
