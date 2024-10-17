@@ -7,7 +7,6 @@ const MIN_WORD_LENGTH = 3;
 const MAIN_WORDS_COUNT = 3;
 
 const BLANK_POINT = {
-  'id': '',
   'basePrice': 0,
   'dateFrom': '',
   'dateTo': '',
@@ -70,6 +69,8 @@ const UpdateType = {
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
 };
 
 export {AUTHORIZATION, END_POINT, BLANK_POINT, HOURS, MINUTES, MIN_WORD_LENGTH, MAIN_WORDS_COUNT, EVENT_TYPES, TimeFormatType, FilterType, Mode, SortType, UserAction, UpdateType, Method};

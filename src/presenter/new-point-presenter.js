@@ -1,4 +1,3 @@
-import { nanoid } from 'nanoid';
 import {isEscapeKey} from '../utils/utils.js';
 import {render, remove, RenderPosition} from '../framework/render.js';
 import { UserAction, UpdateType, BLANK_POINT } from '../utils/consts.js';
@@ -57,7 +56,7 @@ export default class NewPointPresenter {
     this.#handleDataChange(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
-      {id: nanoid(), ...point}
+      point,
     );
 
     this.destroy();
