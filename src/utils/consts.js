@@ -1,3 +1,11 @@
+const AUTHORIZATION = 'Basic tmy8qnrywc9dgq';
+const END_POINT = 'https://24.objects.htmlacademy.pro/big-trip';
+
+const HOURS = 24;
+const MINUTES = 60;
+const MIN_WORD_LENGTH = 3;
+const MAIN_WORDS_COUNT = 3;
+
 const BLANK_POINT = {
   'id': '',
   'basePrice': 0,
@@ -7,14 +15,6 @@ const BLANK_POINT = {
   'isFavorite': false,
   'offers': [],
   'type': 'flight'
-};
-
-const TIME_FORMAT = {
-  fullDateAndTime: 'DD/MM/YY HH:mm',
-  eventDate: 'MMM DD',
-  fullEventDate: 'YYYY-MM-DD',
-  eventTime: 'HH:mm',
-
 };
 
 const EVENT_TYPES = [
@@ -28,6 +28,13 @@ const EVENT_TYPES = [
   'sightseeing',
   'restaurant'
 ];
+
+const TimeFormatType = {
+  FULL_DATE_AND_TIME: 'DD/MM/YY HH:mm',
+  SHORT_DATE: 'MMM DD',
+  FULL_DATE: 'YYYY-MM-DD',
+  TIME: 'HH:mm',
+};
 
 const FilterType = {
   EVERYTHING: 'EVERYTHING',
@@ -57,9 +64,12 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
-const HOURS = 24;
-const MINUTES = 60;
+const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+};
 
-export {BLANK_POINT, TIME_FORMAT, HOURS, MINUTES, EVENT_TYPES, FilterType, Mode, SortType, UserAction, UpdateType};
+export {AUTHORIZATION, END_POINT, BLANK_POINT, HOURS, MINUTES, MIN_WORD_LENGTH, MAIN_WORDS_COUNT, EVENT_TYPES, TimeFormatType, FilterType, Mode, SortType, UserAction, UpdateType, Method};

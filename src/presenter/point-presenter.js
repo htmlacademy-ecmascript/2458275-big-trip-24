@@ -2,7 +2,7 @@ import PointEditView from '../view/point-edit-view.js';
 import PointView from '../view/point-view.js';
 import {isEscapeKey} from '../utils/utils.js';
 import {replace, render, remove} from '../framework/render.js';
-import {Mode, UserAction, UpdateType} from '../consts.js';
+import {Mode, UserAction, UpdateType} from '../utils/consts.js';
 import {isDatesEqual} from '../utils/point.js';
 
 export default class PointPresenter {
@@ -33,16 +33,16 @@ export default class PointPresenter {
 
     this.#pointComponent = new PointView ({
       point: this.#point,
-      destination: this.#destinationsModel.getDestinationsById(point.destination),
-      offers: [...this.#offersModel.getOffersById(point.type, point.offers)],
+      allDestinations: this.#destinationsModel.destinations,
+      allOffers: this.#offersModel.offers,
       onEditOpenButtonClick: this.#handleEditOpenClick,
       onFavoriteClick: this.#handleFavoriteClick,
     });
 
     this.#pointEditComponent = new PointEditView ({
       point: this.#point,
-      allDestinations: this.#destinationsModel.getDestinations(),
-      allOffers: this.#offersModel.getOffers(),
+      allDestinations: this.#destinationsModel.destinations,
+      allOffers: this.#offersModel.offers,
       onEditCloseButtonClick: this.#handleEditCloseClick,
       onDeleteClick: this.#handleDeleteClick,
       onFormSubmit: this.#handleFormSubmit,

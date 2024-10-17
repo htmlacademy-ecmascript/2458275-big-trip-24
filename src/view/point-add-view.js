@@ -1,7 +1,7 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import {EVENT_TYPES} from '../consts.js';
-import {getOffersByType, getOffersById, getChosenDestination} from '../utils/point.js';
-import {createTypeTemplate, createDestinationsTemplate, createTimeTemplate, createPriceTemplate, createOffersTemplate, createDescriptionTemplate} from './templates-for-views.js';
+import {EVENT_TYPES} from '../utils/consts.js';
+import {getOffersByType, getDestinationById} from '../utils/point.js';
+import {createTypeTemplate, createDestinationsTemplate, createTimeTemplate, createPriceTemplate, createOffersTemplate, createDescriptionTemplate} from './common-templates-for-views.js';
 
 import flatpickr from 'flatpickr';
 
@@ -10,9 +10,8 @@ import 'flatpickr/dist/flatpickr.min.css';
 
 function createNewPointTemplate({point, allDestinations, allOffers}) {
   const { basePrice, dateFrom, dateTo, type, destination, offers } = point;
-  const chosenDestination = getChosenDestination(allDestinations, destination);
+  const chosenDestination = getDestinationById(allDestinations, destination);
   const allTypeOffers = getOffersByType(allOffers, type);
-  const chosenOffers = getOffersById(allOffers, type, offers);
 
   const { name, description, pictures } = chosenDestination;
 
@@ -20,7 +19,7 @@ function createNewPointTemplate({point, allDestinations, allOffers}) {
   const destinationsTemplate = createDestinationsTemplate(allDestinations, type, name);
   const timeTemplate = createTimeTemplate(dateFrom, dateTo);
   const priceTemplate = createPriceTemplate(basePrice);
-  const offersTemplate = createOffersTemplate(allTypeOffers, chosenOffers);
+  const offersTemplate = createOffersTemplate(allTypeOffers, offers);
   const descriptionTemplate = createDescriptionTemplate(description, pictures);
 
   return `<li class="trip-events__item">
