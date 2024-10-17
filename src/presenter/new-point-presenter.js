@@ -14,7 +14,7 @@ export default class NewPointPresenter {
   #destinationsModel = null;
   #offersModel = null;
 
-  constructor({ pointsListContainer, destinationsModel, offersModel, onDataChange, onDestroy}) {
+  constructor({pointsListContainer, destinationsModel, offersModel, onDataChange, onDestroy}) {
     this.#pointsListContainer = pointsListContainer;
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;

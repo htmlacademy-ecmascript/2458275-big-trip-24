@@ -2,12 +2,16 @@ import Observable from '../framework/observable.js';
 import {UpdateType} from '../utils/consts.js';
 
 export default class PointsModel extends Observable {
-  #pointsApiService = null;
+  #eventApiService = null;
+  #offersModel = null;
+  #destinationsModel = null;
   #points = [];
 
-  constructor({pointsApiService}) {
+  constructor(eventApiService, offersModel, destinationsModel) {
     super();
-    this.#pointsApiService = pointsApiService;
+    this.#eventApiService = eventApiService;
+    this.#offersModel = offersModel;
+    this.#destinationsModel = destinationsModel;
   }
 
   get points() {
@@ -16,14 +20,13 @@ export default class PointsModel extends Observable {
 
   async init() {
     try {
-      const points = await this.#pointsApiService.points;
+      await Promise.all([this.#offersModel.init(), this.#destinationsModel.init()]);
+      const points = await this.#eventApiService.points;
       this.#points = points.map(this.#adaptToClient);
-      console.log(this.#points);
     } catch(err) {
       this.#points = [];
-
-      this._notify(UpdateType.INIT);
     }
+    this._notify(UpdateType.INIT);
   }
 
   updatePoint(updateType, update) {

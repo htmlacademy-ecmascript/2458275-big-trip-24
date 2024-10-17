@@ -8,24 +8,18 @@ import FiltersModel from './model/filters-model.js';
 import OffersModel from './model/offers-model.js';
 import DestinationsModel from './model/destinations-model.js';
 import NewPointButtonView from './view/new-point-button-view.js';
-import PointsApiService from './points-api-service.js';
+import EventApiService from './event-api-service.js';
 
 const filtersElement = document.querySelector(
   '.trip-controls__filters');
 const pointsElement = document.querySelector('.trip-events');
 const tripMainElement = document.querySelector('.trip-main');
 
-const pointsModel = new PointsModel({
-  pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
-});
+const service = new EventApiService(END_POINT, AUTHORIZATION);
 
-const offersModel = new OffersModel({
-  pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
-});
-
-const destinationsModel = new DestinationsModel({
-  pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
-});
+const offersModel = new OffersModel(service);
+const destinationsModel = new DestinationsModel(service);
+const pointsModel = new PointsModel(service, offersModel, destinationsModel);
 
 const filtersModel = new FiltersModel();
 
@@ -59,8 +53,6 @@ function handleNewPointButtonClick() {
 
 filtersPresenter.init();
 boardPresenter.init();
-destinationsModel.init();
-offersModel.init();
 pointsModel.init()
   .finally(() => {
     render(newPointButtonComponent, tripMainElement);

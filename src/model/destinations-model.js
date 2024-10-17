@@ -1,9 +1,9 @@
 export default class DestinationsModel{
-  #pointsApiService = null;
+  #eventApiService = null;
   #destinations = [];
 
-  constructor({pointsApiService}) {
-    this.#pointsApiService = pointsApiService;
+  constructor(eventApiService) {
+    this.#eventApiService = eventApiService;
   }
 
   get destinations() {
@@ -12,7 +12,7 @@ export default class DestinationsModel{
 
   async init() {
     try {
-      const destinations = await this.#pointsApiService.destinations;
+      const destinations = await this.#eventApiService.destinations;
       this.#destinations = destinations;
     } catch(err) {
       this.#destinations = [];
