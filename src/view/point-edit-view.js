@@ -7,18 +7,18 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 
-function createPointEditingTemplate({point, allDestinations, allOffers}) {
+function createPointEditingTemplate(point, allDestinations, allOffers, isDisabled, isSaving, isDeleting) {
   const { basePrice, dateFrom, dateTo, type, destination, offers } = point;
   const chosenDestination = getDestinationById(allDestinations, destination);
   const allTypeOffers = getOffersByType(allOffers, type);
 
   const { name, description, pictures } = chosenDestination;
 
-  const typeTemplate = createTypeTemplate(EVENT_TYPES, type);
-  const destinationsTemplate = createDestinationsTemplate(allDestinations, type, name);
-  const timeTemplate = createTimeTemplate(dateFrom, dateTo);
-  const priceTemplate = createPriceTemplate(basePrice);
-  const offersTemplate = createOffersTemplate(allTypeOffers, offers);
+  const typeTemplate = createTypeTemplate(EVENT_TYPES, type, isDisabled);
+  const destinationsTemplate = createDestinationsTemplate(allDestinations, type, name, isDisabled);
+  const timeTemplate = createTimeTemplate(dateFrom, dateTo, isDisabled);
+  const priceTemplate = createPriceTemplate(basePrice, isDisabled);
+  const offersTemplate = createOffersTemplate(allTypeOffers, offers, isDisabled);
   const descriptionTemplate = createDescriptionTemplate(description, pictures);
 
   return `<li class="trip-events__item">
@@ -28,9 +28,9 @@ function createPointEditingTemplate({point, allDestinations, allOffers}) {
                         ${destinationsTemplate}
                         ${timeTemplate}
                         ${priceTemplate}
-                  <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-                  <button class="event__reset-btn" type="reset">Delete</button>
-                  <button class="event__rollup-btn" type="button">
+                  <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''} ${isSaving ? 'saving...' : 'save'}>Save</button>
+                  <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}  ${isDeleting ? 'deleting...' : 'delete'}>Delete</button>
+                  <button class="event__rollup-btn" type="button" ${isDisabled ? 'disabled' : ''}>
                     <span class="visually-hidden">Open event</span>
                   </button>
                 </header>
@@ -64,11 +64,7 @@ export default class PointEditView extends AbstractStatefulView {
   }
 
   get template() {
-    return createPointEditingTemplate({
-      point: this._state,
-      allDestinations: this.#allDestinations,
-      allOffers: this.#allOffers,
-    });
+    return createPointEditingTemplate(this._state, this.#allDestinations, this.#allOffers);
   }
 
   removeElement() {
@@ -185,10 +181,19 @@ export default class PointEditView extends AbstractStatefulView {
 
 
   static parsePointToState(point) {
-    return {...point};
+    return {...point,
+      isDisabled: false,
+      isSaving: false,
+      isDeleting: false,
+    };
   }
 
   static parseStateToPoint(state) {
-    return {...state};
+    const point = {...state};
+
+    delete point.isDisabled;
+    delete point.isSaving;
+    delete point.isDeleting;
+    return point;
   }
 }

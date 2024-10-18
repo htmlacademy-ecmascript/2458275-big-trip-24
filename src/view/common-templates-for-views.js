@@ -3,7 +3,7 @@ import {getOfferInputUniqueDetails, humanizeEventDate} from '../utils/point.js';
 import {TimeFormatType} from '../utils/consts.js';
 
 
-function createTypeTemplate(allTypes, chosenType) {
+function createTypeTemplate(allTypes, chosenType, isDisabled) {
   const typesList = allTypes.map ((type) =>`<div class="event__type-item">
   <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${type === chosenType ? 'checked' : ''}>
   <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${capitalize(type)}</label>
@@ -14,7 +14,7 @@ function createTypeTemplate(allTypes, chosenType) {
     <span class="visually-hidden">Choose event type</span>
     <img class="event__type-icon" width="17" height="17" src="img/icons/${chosenType}.png" alt="Event type icon">
   </label>
-  <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+  <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox" ${isDisabled ? 'disabled' : ''}>
 
   <div class="event__type-list">
     <fieldset class="event__type-group">
@@ -25,8 +25,8 @@ function createTypeTemplate(allTypes, chosenType) {
 </div>`;
 }
 
-function createDestinationsTemplate (allDestinations, chosenType, name) {
-  const destinationsList = allDestinations.map((item) => `<option value=${item.name}></option>`).join('');
+function createDestinationsTemplate (allDestinations, chosenType, name, isDisabled) {
+  const destinationsList = allDestinations.map((item) => `<option value=${item.name} ${isDisabled ? 'disabled' : ''}></option>`).join('');
 
   return `<div class="event__field-group  event__field-group--destination">
   <label class="event__label  event__type-output" for="event-destination-1">
@@ -39,30 +39,30 @@ function createDestinationsTemplate (allDestinations, chosenType, name) {
 </div>`;
 }
 
-function createTimeTemplate(dateFrom, dateTo) {
+function createTimeTemplate(dateFrom, dateTo, isDisabled) {
   return `<div class="event__field-group  event__field-group--time">
   <label class="visually-hidden" for="event-start-time-1">${dateFrom ? dateFrom : ''}</label>
-  <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFrom ? humanizeEventDate(dateFrom, TimeFormatType.FULL_DATE_AND_TIME) : ''}">
+  <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFrom ? humanizeEventDate(dateFrom, TimeFormatType.FULL_DATE_AND_TIME) : ''}" ${isDisabled ? 'disabled' : ''}>
   &mdash;
   <label class="visually-hidden" for="event-end-time-1">${dateTo ? dateTo : ''}</label>
-  <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateTo ? humanizeEventDate(dateTo, TimeFormatType.FULL_DATE_AND_TIME) : ''}">
+  <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateTo ? humanizeEventDate(dateTo, TimeFormatType.FULL_DATE_AND_TIME) : ''}" ${isDisabled ? 'disabled' : ''}>
 </div>`;
 }
 
-function createPriceTemplate(basePrice) {
+function createPriceTemplate(basePrice, isDisabled) {
   return `<div class="event__field-group  event__field-group--price">
   <label class="event__label" for="event-price-1">
     <span class="visually-hidden">${basePrice}</span>
     &euro;
   </label>
-  <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${basePrice}">
+  <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${basePrice}" ${isDisabled ? 'disabled' : ''}>
 </div>`;
 }
 
-function createOffersTemplate(allTypeOffers, offers) {
+function createOffersTemplate(allTypeOffers, offers, isDisabled) {
 
   const offersList = allTypeOffers.map(({title, price, id}) => `<div class="event__offer-selector">
-                      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${getOfferInputUniqueDetails(title)}-1" type="checkbox" name="event-offer-${getOfferInputUniqueDetails(title)}" data-offer-id="${id}" ${offers.includes(id) ? 'checked' : ''}>
+                      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${getOfferInputUniqueDetails(title)}-1" type="checkbox" name="event-offer-${getOfferInputUniqueDetails(title)}" data-offer-id="${id}" ${offers.includes(id) ? 'checked' : ''} ${isDisabled ? 'disabled' : ''}>
                       <label class="event__offer-label" for="event-offer-${getOfferInputUniqueDetails(title)}-1">
                         <span class="event__offer-title">${title}</span>
                         &plus;&euro;&nbsp;
