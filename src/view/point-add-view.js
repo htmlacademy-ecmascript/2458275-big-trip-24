@@ -8,8 +8,8 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 
-function createNewPointTemplate(point, allDestinations, allOffers, isDisabled, isSaving) {
-  const { basePrice, dateFrom, dateTo, type, destination, offers } = point;
+function createNewPointTemplate(point, allDestinations, allOffers) {
+  const { basePrice, dateFrom, dateTo, type, destination, offers, isDisabled, isSaving } = point;
   const chosenDestination = getDestinationById(allDestinations, destination);
   const allTypeOffers = getOffersByType(allOffers, type);
 
@@ -29,7 +29,7 @@ function createNewPointTemplate(point, allDestinations, allOffers, isDisabled, i
                         ${destinationsTemplate}
                         ${timeTemplate}
                         ${priceTemplate}
-<button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''} ${isSaving ? 'saving...' : 'save'}>Save</button>
+<button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
                   <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>Cancel</button>
                 </header>
                 <section class="event__details">
@@ -164,10 +164,19 @@ export default class PointAddView extends AbstractStatefulView {
   };
 
   static parsePointToState(point) {
-    return {...point};
+    return {...point,
+      isDisabled: false,
+      isSaving: false,
+      isDeleting: false,
+    };
   }
 
   static parseStateToPoint(state) {
-    return {...state};
+    const point = {...state};
+
+    delete point.isDisabled;
+    delete point.isSaving;
+    delete point.isDeleting;
+    return point;
   }
 }

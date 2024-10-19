@@ -7,8 +7,8 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 
-function createPointEditingTemplate(point, allDestinations, allOffers, isDisabled, isSaving, isDeleting) {
-  const { basePrice, dateFrom, dateTo, type, destination, offers } = point;
+function createPointEditingTemplate(point, allDestinations, allOffers) {
+  const { basePrice, dateFrom, dateTo, type, destination, offers, isDisabled, isSaving, isDeleting } = point;
   const chosenDestination = getDestinationById(allDestinations, destination);
   const allTypeOffers = getOffersByType(allOffers, type);
 
@@ -28,8 +28,8 @@ function createPointEditingTemplate(point, allDestinations, allOffers, isDisable
                         ${destinationsTemplate}
                         ${timeTemplate}
                         ${priceTemplate}
-                  <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''} ${isSaving ? 'saving...' : 'save'}>Save</button>
-                  <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}  ${isDeleting ? 'deleting...' : 'delete'}>Delete</button>
+                  <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
+                  <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
                   <button class="event__rollup-btn" type="button" ${isDisabled ? 'disabled' : ''}>
                     <span class="visually-hidden">Open event</span>
                   </button>
@@ -194,6 +194,7 @@ export default class PointEditView extends AbstractStatefulView {
     delete point.isDisabled;
     delete point.isSaving;
     delete point.isDeleting;
+
     return point;
   }
 }
