@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {HOURS, MINUTES, MIN_WORD_LENGTH, MAIN_WORDS_COUNT} from './consts.js';
+import {HOURS, MINUTES} from './consts.js';
 import {padToTwoDigits} from './utils.js';
 
 
@@ -12,17 +12,6 @@ const getOffersById = (allOffers, type, itemsIds) => {
 };
 
 const getDestinationById = (allDestinations, destination) => destination ? allDestinations.find((item) => item.id === destination) : '';
-
-function getOfferInputUniqueDetails (title) {
-  const offerTitleMainWords = title.split(/[,' ]+/).filter((word) => word.length >= MIN_WORD_LENGTH);
-
-  let offerInputUniqueDetails = offerTitleMainWords.length >= MAIN_WORDS_COUNT ? offerTitleMainWords.slice(1, 5).join('-').toLowerCase() : offerTitleMainWords.join('-').toLowerCase();
-  if (offerInputUniqueDetails.includes('the-')) {
-    offerInputUniqueDetails = offerInputUniqueDetails.replace(/the-/g, '');
-  }
-
-  return offerInputUniqueDetails;
-}
 
 function humanizeEventDate(eventDate, format) {
   return dayjs(eventDate).format(format);
@@ -85,4 +74,4 @@ function isDatesEqual(dateA, dateB) {
 }
 
 
-export {humanizeEventDate, getFormattedEventDuration, isFuturePoint, isPresentPoint, isPastPoint, sortPointsByDay, sortPointsByDuration, sortPointsByPrice, getOffersByType, getOffersById, getOfferInputUniqueDetails, getDestinationById, isDatesEqual};
+export {humanizeEventDate, getFormattedEventDuration, isFuturePoint, isPresentPoint, isPastPoint, sortPointsByDay, sortPointsByDuration, sortPointsByPrice, getOffersByType, getOffersById, getDestinationById, isDatesEqual};

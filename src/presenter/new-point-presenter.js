@@ -1,4 +1,4 @@
-import {isEscapeKey} from '../utils/utils.js';
+import {isEscapeKey} from '../utils/common.js';
 import {render, remove, RenderPosition} from '../framework/render.js';
 import { UserAction, UpdateType, BLANK_POINT } from '../utils/consts.js';
 import PointAddView from '../view/point-add-view.js';

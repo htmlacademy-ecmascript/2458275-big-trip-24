@@ -1,5 +1,5 @@
-import {capitalize} from '../utils/utils.js';
-import {getOfferInputUniqueDetails, humanizeEventDate} from '../utils/point.js';
+import {capitalize, changeSpaceToHyphen} from '../utils/common.js';
+import {humanizeEventDate} from '../utils/point.js';
 import {TimeFormatType} from '../utils/consts.js';
 import he from 'he';
 
@@ -63,8 +63,8 @@ function createPriceTemplate(basePrice, isDisabled) {
 function createOffersTemplate(allTypeOffers, offers, isDisabled) {
 
   const offersList = allTypeOffers.map(({title, price, id}) => `<div class="event__offer-selector">
-                      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${getOfferInputUniqueDetails(title)}-1" type="checkbox" name="event-offer-${getOfferInputUniqueDetails(title)}" data-offer-id="${id}" ${offers.includes(id) ? 'checked' : ''} ${isDisabled ? 'disabled' : ''}>
-                      <label class="event__offer-label" for="event-offer-${getOfferInputUniqueDetails(title)}-1">
+                      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${changeSpaceToHyphen(title)}-1" type="checkbox" name="event-offer-${changeSpaceToHyphen(title)}" data-offer-id="${id}" ${offers.includes(id) ? 'checked' : ''} ${isDisabled ? 'disabled' : ''}>
+                      <label class="event__offer-label" for="event-offer-${changeSpaceToHyphen(title)}-1">
                         <span class="event__offer-title">${title}</span>
                         &plus;&euro;&nbsp;
                         <span class="event__offer-price">${price}</span>

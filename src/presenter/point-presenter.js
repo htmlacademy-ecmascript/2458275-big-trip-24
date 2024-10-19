@@ -1,6 +1,6 @@
 import PointEditView from '../view/point-edit-view.js';
 import PointView from '../view/point-view.js';
-import {isEscapeKey} from '../utils/utils.js';
+import {isEscapeKey} from '../utils/common.js';
 import {replace, render, remove} from '../framework/render.js';
 import {Mode, UserAction, UpdateType} from '../utils/consts.js';
 import {isDatesEqual} from '../utils/point.js';
