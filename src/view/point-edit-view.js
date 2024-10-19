@@ -28,9 +28,9 @@ function createPointEditingTemplate(point, allDestinations, allOffers) {
                         ${destinationsTemplate}
                         ${timeTemplate}
                         ${priceTemplate}
-                  <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
-                  <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
-                  <button class="event__rollup-btn" type="button" ${isDisabled ? 'disabled' : ''}>
+                  <button class="event__save-btn  btn  btn--blue" type="submit" ${(isDeleting || isSaving) ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
+                  <button class="event__reset-btn" type="reset" ${(isDeleting || isSaving) ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
+                  <button class="event__rollup-btn" type="button" ${(isDeleting || isSaving) ? 'disabled' : ''}}>
                     <span class="visually-hidden">Open event</span>
                   </button>
                 </header>

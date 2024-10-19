@@ -16,6 +16,7 @@ export default class DestinationsModel{
       this.#destinations = destinations;
     } catch(err) {
       this.#destinations = [];
+      this._notify(UpdateType.ERROR);
     }
   }
 }

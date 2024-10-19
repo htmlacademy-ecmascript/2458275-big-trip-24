@@ -16,6 +16,7 @@ export default class OffersModel{
       this.#offers = offers;
     } catch(err) {
       this.#offers = [];
+      this._notify(UpdateType.ERROR);
     }
   }
 }

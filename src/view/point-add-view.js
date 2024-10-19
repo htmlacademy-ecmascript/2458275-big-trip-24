@@ -29,8 +29,8 @@ function createNewPointTemplate(point, allDestinations, allOffers) {
                         ${destinationsTemplate}
                         ${timeTemplate}
                         ${priceTemplate}
-<button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
-                  <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>Cancel</button>
+<button class="event__save-btn  btn  btn--blue" type="submit" ${isSaving ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
+                  <button class="event__reset-btn" type="reset" ${(isSaving || isDisabled) ? 'disabled' : ''}>Cancel</button>
                 </header>
                 <section class="event__details">
                       ${offersTemplate}
