@@ -8,18 +8,18 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 
-function createNewPointTemplate({point, allDestinations, allOffers}) {
-  const { basePrice, dateFrom, dateTo, type, destination, offers } = point;
+function createNewPointTemplate(point, allDestinations, allOffers) {
+  const { basePrice, dateFrom, dateTo, type, destination, offers, isDisabled, isSaving } = point;
   const chosenDestination = getDestinationById(allDestinations, destination);
   const allTypeOffers = getOffersByType(allOffers, type);
 
   const { name, description, pictures } = chosenDestination;
 
-  const typeTemplate = createTypeTemplate(EVENT_TYPES, type);
-  const destinationsTemplate = createDestinationsTemplate(allDestinations, type, name);
-  const timeTemplate = createTimeTemplate(dateFrom, dateTo);
-  const priceTemplate = createPriceTemplate(basePrice);
-  const offersTemplate = createOffersTemplate(allTypeOffers, offers);
+  const typeTemplate = createTypeTemplate(EVENT_TYPES, type, isDisabled);
+  const destinationsTemplate = createDestinationsTemplate(allDestinations, type, name, isDisabled);
+  const timeTemplate = createTimeTemplate(dateFrom, dateTo, isDisabled);
+  const priceTemplate = createPriceTemplate(basePrice, isDisabled);
+  const offersTemplate = createOffersTemplate(allTypeOffers, offers, isDisabled);
   const descriptionTemplate = createDescriptionTemplate(description, pictures);
 
   return `<li class="trip-events__item">
@@ -29,8 +29,8 @@ function createNewPointTemplate({point, allDestinations, allOffers}) {
                         ${destinationsTemplate}
                         ${timeTemplate}
                         ${priceTemplate}
-<button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-                  <button class="event__reset-btn" type="reset">Cancel</button>
+<button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
+                  <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>Cancel</button>
                 </header>
                 <section class="event__details">
                       ${offersTemplate}
@@ -60,11 +60,7 @@ export default class PointAddView extends AbstractStatefulView {
   }
 
   get template() {
-    return createNewPointTemplate({
-      point: this._state,
-      allDestinations: this.#allDestinations,
-      allOffers: this.#allOffers,
-    });
+    return createNewPointTemplate(this._state, this.#allDestinations, this.#allOffers);
   }
 
   removeElement() {
@@ -168,10 +164,19 @@ export default class PointAddView extends AbstractStatefulView {
   };
 
   static parsePointToState(point) {
-    return {...point};
+    return {...point,
+      isDisabled: false,
+      isSaving: false,
+      isDeleting: false,
+    };
   }
 
   static parseStateToPoint(state) {
-    return {...state};
+    const point = {...state};
+
+    delete point.isDisabled;
+    delete point.isSaving;
+    delete point.isDeleting;
+    return point;
   }
 }

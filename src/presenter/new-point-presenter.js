@@ -1,4 +1,3 @@
-import { nanoid } from 'nanoid';
 import {isEscapeKey} from '../utils/utils.js';
 import {render, remove, RenderPosition} from '../framework/render.js';
 import { UserAction, UpdateType, BLANK_POINT } from '../utils/consts.js';
@@ -53,14 +52,31 @@ export default class NewPointPresenter {
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
+  setSaving() {
+    this.#pointAddComponent.updateElement({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this.#pointAddComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#pointAddComponent.shake(resetFormState);
+  }
+
   #handleFormSubmit = (point) => {
     this.#handleDataChange(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
-      {id: nanoid(), ...point}
+      point,
     );
-
-    this.destroy();
   };
 
   #handleCancelClick = () => {
