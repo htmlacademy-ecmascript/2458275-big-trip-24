@@ -1,3 +1,4 @@
+import {UpdateType} from '../utils/consts.js';
 export default class DestinationsModel{
   #eventApiService = null;
   #destinations = [];

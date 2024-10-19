@@ -1,3 +1,5 @@
+import {UpdateType} from '../utils/consts.js';
+
 export default class OffersModel{
   #eventApiService = null;
   #offers = [];

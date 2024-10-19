@@ -46,10 +46,10 @@ export default class BoardPresenter {
 
     this.#newPointPresenter = new NewPointPresenter ({
       pointsListContainer: this.#pointsListComponent.element,
+      offersModel,
+      destinationsModel,
       onDataChange: this.#handleViewAction,
       onDestroy: onNewPointDestroy,
-      offersModel,
-      destinationsModel
     });
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
@@ -80,6 +80,9 @@ export default class BoardPresenter {
     this.#currentSortType = SortType.DAY;
     this.#filtersModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#newPointPresenter.init();
+    if(this.#emptyListComponent) {
+      remove(this.#emptyListComponent);
+    }
   }
 
   #clearBoard({resetSortType = false} = {}) {
@@ -151,6 +154,7 @@ export default class BoardPresenter {
 
     if (!this.points.length) {
       this.#renderEmptyList();
+      render(this.#pointsListComponent, this.#pointsContainer);
       return;
     }
 

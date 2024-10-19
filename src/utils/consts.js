@@ -1,4 +1,4 @@
-const AUTHORIZATION = 'Basic tmy8qnrywc9dgq';
+const AUTHORIZATION = 'Basic tmy8q8irywc9dgq';
 const END_POINT = 'https://24.objects.htmlacademy.pro/big-trip';
 
 const HOURS = 24;
