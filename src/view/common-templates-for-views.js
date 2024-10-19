@@ -1,6 +1,7 @@
 import {capitalize} from '../utils/utils.js';
 import {getOfferInputUniqueDetails, humanizeEventDate} from '../utils/point.js';
 import {TimeFormatType} from '../utils/consts.js';
+import he from 'he';
 
 
 function createTypeTemplate(allTypes, chosenType, isDisabled) {
@@ -32,7 +33,7 @@ function createDestinationsTemplate (allDestinations, chosenType, name, isDisabl
   <label class="event__label  event__type-output" for="event-destination-1">
     ${chosenType}
   </label>
-  <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name ? name : ''}" list="destination-list-1">
+  <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name ? he.encode(name) : ''}" list="destination-list-1">
   <datalist id="destination-list-1">
   ${destinationsList}
   </datalist>
@@ -55,7 +56,7 @@ function createPriceTemplate(basePrice, isDisabled) {
     <span class="visually-hidden">${basePrice}</span>
     &euro;
   </label>
-  <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${basePrice}" ${isDisabled ? 'disabled' : ''}>
+  <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${he.encode(String(basePrice))}" ${isDisabled ? 'disabled' : ''}>
 </div>`;
 }
 
