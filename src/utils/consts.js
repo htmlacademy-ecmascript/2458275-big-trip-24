@@ -42,6 +42,13 @@ const FilterType = {
   PAST: 'PAST',
 };
 
+const NoPointsTextType = {
+  [FilterType.EVERYTHING]: 'Click New Event to create your first point',
+  [FilterType.FUTURE]: 'There are no future events now',
+  [FilterType.PRESENT]: 'There are no present events now',
+  [FilterType.PAST]: 'There are no past events now',
+};
+
 const Mode = {
   DEFAULT: 'DEFAULT',
   EDITING: 'EDITING',
@@ -64,6 +71,7 @@ const UpdateType = {
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
   INIT: 'INIT',
+  ERROR: 'ERROR',
 };
 
 const Method = {
@@ -78,4 +86,4 @@ const TimeLimit = {
   UPPER_LIMIT: 1000,
 };
 
-export {AUTHORIZATION, END_POINT, BLANK_POINT, HOURS, MINUTES, MIN_WORD_LENGTH, MAIN_WORDS_COUNT, EVENT_TYPES, TimeFormatType, FilterType, Mode, SortType, UserAction, UpdateType, Method, TimeLimit};
+export {AUTHORIZATION, END_POINT, BLANK_POINT, HOURS, MINUTES, MIN_WORD_LENGTH, MAIN_WORDS_COUNT, EVENT_TYPES, TimeFormatType, FilterType, Mode, SortType, UserAction, UpdateType, Method, TimeLimit, NoPointsTextType};

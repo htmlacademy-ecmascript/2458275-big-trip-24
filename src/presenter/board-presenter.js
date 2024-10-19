@@ -5,6 +5,7 @@ import SortView from '../view/sort-view.js';
 import PointsListView from '../view/points-list-view.js';
 import NoPointView from '../view/no-point-view.js';
 import LoadingView from '../view/loading-view.js';
+import ServerErrorView from '../view/server-error-view.js';
 
 import PointPresenter from './point-presenter.js';
 import NewPointPresenter from './new-point-presenter.js';
@@ -23,12 +24,14 @@ export default class BoardPresenter {
   #pointsListComponent = new PointsListView();
   #emptyListComponent = null;
   #loadingComponent = new LoadingView();
+  #serverErrorComponent = new ServerErrorView();
 
   #pointPresenters = new Map();
   #newPointPresenter = null;
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
   #isLoading = true;
+
   #uiBlocker = new UiBlocker({
     lowerLimit: TimeLimit.LOWER_LIMIT,
     upperLimit: TimeLimit.UPPER_LIMIT
@@ -114,6 +117,10 @@ export default class BoardPresenter {
 
   #renderLoading() {
     render(this.#loadingComponent, this.#pointsContainer, RenderPosition.AFTERBEGIN);
+  }
+
+  #renderServerError() {
+    render(this.#serverErrorComponent, this.#pointsContainer, RenderPosition.AFTERBEGIN);
   }
 
   #renderPoint(point) {
@@ -203,6 +210,11 @@ export default class BoardPresenter {
         this.#isLoading = false;
         remove(this.#loadingComponent);
         this.#renderBoard();
+        break;
+      case UpdateType.ERROR:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderServerError();
         break;
     }
   };
