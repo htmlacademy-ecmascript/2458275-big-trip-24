@@ -13,6 +13,27 @@ const getOffersById = (allOffers, type, itemsIds) => {
 
 const getDestinationById = (allDestinations, destination) => destination ? allDestinations.find((item) => item.id === destination) : '';
 
+function getCurrentTripDestinations(points, destinations) {
+  const destinationsIds = points.map((point) => point.destination);
+  const currentTripDestinations = destinationsIds.map((destination) => getDestinationById(destinations, destination));
+
+  return currentTripDestinations;
+}
+
+function getTripTotalPrice(points, offers) {
+
+  const currentTripOffers = points.map((point) => getOffersById(offers, point.type, point.offers));
+  const currentTripOffersPrices = currentTripOffers.map((offer) => offer.price);
+  const currentTripBacePrices = points.map((point) => point.basePrice);
+  const allPrices = [...currentTripOffersPrices, ...currentTripBacePrices];
+
+  let totalPrice = 0;
+  for (let i = 0; i < allPrices.length; i++) {
+    totalPrice += allPrices[i];
+  }
+  return totalPrice;
+}
+
 function humanizeEventDate(eventDate, format) {
   return dayjs(eventDate).format(format);
 }
@@ -74,4 +95,4 @@ function isDatesEqual(dateA, dateB) {
 }
 
 
-export {humanizeEventDate, getFormattedEventDuration, isFuturePoint, isPresentPoint, isPastPoint, sortPointsByDay, sortPointsByDuration, sortPointsByPrice, getOffersByType, getOffersById, getDestinationById, isDatesEqual};
+export {humanizeEventDate, getFormattedEventDuration, isFuturePoint, isPresentPoint, isPastPoint, sortPointsByDay, sortPointsByDuration, sortPointsByPrice, getOffersByType, getOffersById, getDestinationById, isDatesEqual, getCurrentTripDestinations, getTripTotalPrice};
