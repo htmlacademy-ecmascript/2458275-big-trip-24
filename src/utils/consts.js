@@ -1,10 +1,8 @@
-const AUTHORIZATION = 'Basic tmy8q8irqqywc9dgq';
+const AUTHORIZATION = 'Basic tmy8q8irqywc9dgq';
 const END_POINT = 'https://24.objects.htmlacademy.pro/big-trip';
 
 const HOURS = 24;
 const MINUTES = 60;
-const MIN_WORD_LENGTH = 3;
-const MAIN_WORDS_COUNT = 3;
 
 const BLANK_POINT = {
   'basePrice': 0,
@@ -86,4 +84,4 @@ const TimeLimit = {
   UPPER_LIMIT: 1000,
 };
 
-export {AUTHORIZATION, END_POINT, BLANK_POINT, HOURS, MINUTES, MIN_WORD_LENGTH, MAIN_WORDS_COUNT, EVENT_TYPES, TimeFormatType, FilterType, Mode, SortType, UserAction, UpdateType, Method, TimeLimit, NoPointsTextType};
+export {AUTHORIZATION, END_POINT, BLANK_POINT, HOURS, MINUTES,EVENT_TYPES, TimeFormatType, FilterType, Mode, SortType, UserAction, UpdateType, Method, TimeLimit, NoPointsTextType};

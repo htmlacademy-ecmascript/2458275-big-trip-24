@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import {HOURS, MINUTES} from './consts.js';
-import {padToTwoDigits} from './utils.js';
+import {padToTwoDigits} from './common.js';
 
 
 const getOffersByType = (allOffers, type) => allOffers.find((offer) => offer.type === type).offers;

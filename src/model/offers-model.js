@@ -1,5 +1,3 @@
-import {UpdateType} from '../utils/consts.js';
-
 export default class OffersModel{
   #eventApiService = null;
   #offers = [];
@@ -18,7 +16,6 @@ export default class OffersModel{
       this.#offers = offers;
     } catch(err) {
       this.#offers = [];
-      this._notify(UpdateType.ERROR);
     }
   }
 }

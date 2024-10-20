@@ -22,6 +22,7 @@ function createFiltersTemplate(filterItems, currentFilter) {
   const filterItemsTemplate = filterItems
     .map((filter) => createFiltersItemTemplate(filter, currentFilter))
     .join('');
+
   return (`<form class="trip-filters" action="#" method="get">
     ${filterItemsTemplate}
     <button class="visually-hidden" type="submit">

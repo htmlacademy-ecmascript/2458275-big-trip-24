@@ -1,7 +1,7 @@
+import {replace, render, remove} from '../framework/render.js';
 import PointEditView from '../view/point-edit-view.js';
 import PointView from '../view/point-view.js';
 import {isEscapeKey} from '../utils/common.js';
-import {replace, render, remove} from '../framework/render.js';
 import {Mode, UserAction, UpdateType} from '../utils/consts.js';
 import {isDatesEqual} from '../utils/point.js';
 
@@ -124,15 +124,6 @@ export default class PointPresenter {
     this.#mode = Mode.EDITING;
   }
 
-  #escKeyDownHandler = (evt) => {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      this.#pointEditComponent.reset(this.#point);
-      this.#replaceEditFormToPoint();
-      document.removeEventListener('keydown', this.#escKeyDownHandler);
-    }
-  };
-
   #handleEditOpenClick = () => {
     this.#replacePointToEditForm();
     document.addEventListener('keydown', this.#escKeyDownHandler);
@@ -168,6 +159,15 @@ export default class PointPresenter {
       UpdateType.MINOR,
       {...this.#point, isFavorite: !this.#point.isFavorite},
     );
+  };
+
+  #escKeyDownHandler = (evt) => {
+    if (isEscapeKey(evt)) {
+      evt.preventDefault();
+      this.#pointEditComponent.reset(this.#point);
+      this.#replaceEditFormToPoint();
+      document.removeEventListener('keydown', this.#escKeyDownHandler);
+    }
   };
 }
 

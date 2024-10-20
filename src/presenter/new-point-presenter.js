@@ -1,6 +1,6 @@
 import {isEscapeKey} from '../utils/common.js';
 import {render, remove, RenderPosition} from '../framework/render.js';
-import { UserAction, UpdateType, BLANK_POINT } from '../utils/consts.js';
+import {UserAction, UpdateType, BLANK_POINT} from '../utils/consts.js';
 import PointAddView from '../view/point-add-view.js';
 
 export default class NewPointPresenter {
@@ -37,7 +37,6 @@ export default class NewPointPresenter {
     });
 
     render(this.#pointAddComponent, this.#pointsListContainer, RenderPosition.AFTERBEGIN);
-
     document.addEventListener('keydown', this.#escKeyDownHandler);
   }
 

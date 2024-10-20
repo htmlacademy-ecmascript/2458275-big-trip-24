@@ -20,7 +20,6 @@ const service = new EventApiService(END_POINT, AUTHORIZATION);
 const offersModel = new OffersModel(service);
 const destinationsModel = new DestinationsModel(service);
 const pointsModel = new PointsModel(service, offersModel, destinationsModel);
-
 const filtersModel = new FiltersModel();
 
 const filtersPresenter = new FiltersPresenter({

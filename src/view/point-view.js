@@ -48,7 +48,6 @@ function createPointTemplate({point, allDestinations, allOffers}) {
               </div>
             </li>`;
 }
-
 export default class pointView extends AbstractView {
   #point = null;
   #allDestinations = [];
