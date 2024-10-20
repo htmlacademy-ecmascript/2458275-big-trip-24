@@ -21,7 +21,7 @@ function createPointTemplate({point, allDestinations, allOffers}) {
                     &mdash;
                     <time class="event__end-time" datetime="${dateTo}">${humanizeEventDate(point.dateTo, TimeFormatType.TIME)}</time>
                   </p>
-                  <p class="event__duration">${getFormattedEventDuration (dateFrom, dateTo)}</p>
+                  <p class="event__duration">${getFormattedEventDuration(dateFrom, dateTo)}</p>
                 </div>
                 <p class="event__price">
                   &euro;&nbsp;<span class="event__price-value">${basePrice}</span>

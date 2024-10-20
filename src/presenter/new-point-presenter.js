@@ -8,17 +8,19 @@ export default class NewPointPresenter {
   #pointsListContainer = null;
   #handleDataChange = null;
   #handleDestroy = null;
+  #handleCancel = null;
 
   #pointAddComponent = null;
   #destinationsModel = null;
   #offersModel = null;
 
-  constructor({pointsListContainer, destinationsModel, offersModel, onDataChange, onDestroy}) {
+  constructor({pointsListContainer, destinationsModel, offersModel, onDataChange, onDestroy, onCancel}) {
     this.#pointsListContainer = pointsListContainer;
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
     this.#handleDataChange = onDataChange;
     this.#handleDestroy = onDestroy;
+    this.#handleCancel = onCancel;
   }
 
   init() {
@@ -45,6 +47,7 @@ export default class NewPointPresenter {
     }
 
     this.#handleDestroy();
+    this.#handleCancel();
 
     remove(this.#pointAddComponent);
     this.#pointAddComponent = null;
