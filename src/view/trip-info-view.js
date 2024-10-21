@@ -1,6 +1,6 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import {sortPointsByDay, getCurrentTripDestinations, getTripTotalPrice, humanizeEventDate} from '../utils/point.js';
-import {TimeFormatType, MAX_POINTS_COUNT, POINTS_MIN_COUNT} from '../utils/consts.js';
+import {sortPointsByDay, getCurrentTripDestinations, getTripTotalPrice, humanizePointDate} from '../utils/point.js';
+import {TimeFormatType, MAX_POINTS_COUNT, MIN_POINTS_COUNT} from '../utils/consts.js';
 
 function createTripInfoTemplate(points, allDestinations, allOffers) {
   const sortedPoints = [...points.sort(sortPointsByDay)];
@@ -12,7 +12,8 @@ function createTripInfoTemplate(points, allDestinations, allOffers) {
   const tripInfoTitle = currentTripDestinations.length >= MAX_POINTS_COUNT ? `${currentTripDestinations[0].name}&mdash; ... &mdash;${currentTripDestinations[currentTripDestinations.length - 1].name}` :
     currentTripDestinations.map((destination) => destination.name).join (' &mdash; ');
 
-  const tripDates = sortedPoints.length > POINTS_MIN_COUNT ? `${humanizeEventDate(sortedPoints[0].dateFrom, TimeFormatType.SHORT_DATE_REVERSED)}&nbsp;&mdash;&nbsp;${humanizeEventDate(sortedPoints[sortedPoints.length - 1].dateTo, TimeFormatType.SHORT_DATE_REVERSED)}` : `${humanizeEventDate(sortedPoints[0].dateFrom, TimeFormatType.SHORT_DATE_REVERSED)}&nbsp;&mdash;&nbsp;${humanizeEventDate(sortedPoints[0].dateTo, TimeFormatType.SHORT_DATE_REVERSED)}`;
+  const tripDates = sortedPoints.length > MIN_POINTS_COUNT ? `${humanizePointDate(sortedPoints[0].dateFrom, TimeFormatType.SHORT_DATE_REVERSED)}&nbsp;&mdash;&nbsp;${humanizePointDate(sortedPoints[sortedPoints.length - 1].dateTo, TimeFormatType.SHORT_DATE_REVERSED)}` :
+    `${humanizePointDate(sortedPoints[0].dateFrom, TimeFormatType.SHORT_DATE_REVERSED)}&nbsp;&mdash;&nbsp;${humanizePointDate(sortedPoints[0].dateTo, TimeFormatType.SHORT_DATE_REVERSED)}`;
 
 
   return `<section class="trip-main__trip-info  trip-info">
