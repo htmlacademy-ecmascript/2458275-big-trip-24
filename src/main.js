@@ -2,6 +2,7 @@ import {render} from './framework/render.js';
 import {AUTHORIZATION, END_POINT} from './utils/consts.js';
 import FiltersPresenter from './presenter/filters-presenter.js';
 import BoardPresenter from './presenter/board-presenter.js';
+import TripInfoPresenter from './presenter/trip-info-presenter.js';
 
 import PointsModel from './model/points-model.js';
 import FiltersModel from './model/filters-model.js';
@@ -20,8 +21,14 @@ const service = new EventApiService(END_POINT, AUTHORIZATION);
 const offersModel = new OffersModel(service);
 const destinationsModel = new DestinationsModel(service);
 const pointsModel = new PointsModel(service, offersModel, destinationsModel);
-
 const filtersModel = new FiltersModel();
+
+const tripInfoPresenter = new TripInfoPresenter ({
+  mainContainer: tripMainElement,
+  destinationsModel,
+  offersModel,
+  pointsModel,
+});
 
 const filtersPresenter = new FiltersPresenter({
   filtersContainer: filtersElement,
@@ -51,6 +58,7 @@ function handleNewPointButtonClick() {
   newPointButtonComponent.element.disabled = true;
 }
 
+tripInfoPresenter.init();
 filtersPresenter.init();
 boardPresenter.init();
 pointsModel.init()

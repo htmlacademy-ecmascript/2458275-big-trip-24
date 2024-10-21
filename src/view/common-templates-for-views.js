@@ -1,5 +1,5 @@
-import {capitalize} from '../utils/utils.js';
-import {getOfferInputUniqueDetails, humanizeEventDate} from '../utils/point.js';
+import {capitalize, changeSpaceToHyphen} from '../utils/common.js';
+import {humanizePointDate} from '../utils/point.js';
 import {TimeFormatType} from '../utils/consts.js';
 import he from 'he';
 
@@ -43,10 +43,10 @@ function createDestinationsTemplate (allDestinations, chosenType, name, isDisabl
 function createTimeTemplate(dateFrom, dateTo, isDisabled) {
   return `<div class="event__field-group  event__field-group--time">
   <label class="visually-hidden" for="event-start-time-1">${dateFrom ? dateFrom : ''}</label>
-  <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFrom ? humanizeEventDate(dateFrom, TimeFormatType.FULL_DATE_AND_TIME) : ''}" ${isDisabled ? 'disabled' : ''}>
+  <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFrom ? humanizePointDate(dateFrom, TimeFormatType.FULL_DATE_AND_TIME) : ''}" ${isDisabled ? 'disabled' : ''}>
   &mdash;
   <label class="visually-hidden" for="event-end-time-1">${dateTo ? dateTo : ''}</label>
-  <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateTo ? humanizeEventDate(dateTo, TimeFormatType.FULL_DATE_AND_TIME) : ''}" ${isDisabled ? 'disabled' : ''}>
+  <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateTo ? humanizePointDate(dateTo, TimeFormatType.FULL_DATE_AND_TIME) : ''}" ${isDisabled ? 'disabled' : ''}>
 </div>`;
 }
 
@@ -63,8 +63,8 @@ function createPriceTemplate(basePrice, isDisabled) {
 function createOffersTemplate(allTypeOffers, offers, isDisabled) {
 
   const offersList = allTypeOffers.map(({title, price, id}) => `<div class="event__offer-selector">
-                      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${getOfferInputUniqueDetails(title)}-1" type="checkbox" name="event-offer-${getOfferInputUniqueDetails(title)}" data-offer-id="${id}" ${offers.includes(id) ? 'checked' : ''} ${isDisabled ? 'disabled' : ''}>
-                      <label class="event__offer-label" for="event-offer-${getOfferInputUniqueDetails(title)}-1">
+                      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${changeSpaceToHyphen(title)}-1" type="checkbox" name="event-offer-${changeSpaceToHyphen(title)}" data-offer-id="${id}" ${offers.includes(id) ? 'checked' : ''} ${isDisabled ? 'disabled' : ''}>
+                      <label class="event__offer-label" for="event-offer-${changeSpaceToHyphen(title)}-1">
                         <span class="event__offer-title">${title}</span>
                         &plus;&euro;&nbsp;
                         <span class="event__offer-price">${price}</span>

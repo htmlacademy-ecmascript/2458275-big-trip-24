@@ -2,8 +2,8 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {EVENT_TYPES} from '../utils/consts.js';
 import {getOffersByType, getDestinationById} from '../utils/point.js';
 import {createTypeTemplate, createDestinationsTemplate, createTimeTemplate, createPriceTemplate, createOffersTemplate, createDescriptionTemplate} from './common-templates-for-views.js';
-import flatpickr from 'flatpickr';
 
+import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 
@@ -28,9 +28,9 @@ function createPointEditingTemplate(point, allDestinations, allOffers) {
                         ${destinationsTemplate}
                         ${timeTemplate}
                         ${priceTemplate}
-                  <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
-                  <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
-                  <button class="event__rollup-btn" type="button" ${isDisabled ? 'disabled' : ''}>
+                  <button class="event__save-btn  btn  btn--blue" type="submit" ${(isDeleting || isSaving) ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
+                  <button class="event__reset-btn" type="reset" ${(isDeleting || isSaving) ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
+                  <button class="event__rollup-btn" type="button" ${(isDeleting || isSaving) ? 'disabled' : ''}}>
                     <span class="visually-hidden">Open event</span>
                   </button>
                 </header>
@@ -43,6 +43,7 @@ function createPointEditingTemplate(point, allDestinations, allOffers) {
 }
 
 export default class PointEditView extends AbstractStatefulView {
+  #originalPoint = null;
   #allDestinations = [];
   #allOffers = [];
   #handleEditCloseButton = null;
@@ -53,6 +54,7 @@ export default class PointEditView extends AbstractStatefulView {
 
   constructor({point, allDestinations, allOffers, onEditCloseButtonClick, onFormSubmit, onDeleteClick}) {
     super();
+    this.#originalPoint = point;
     this._setState(PointEditView.parsePointToState(point));
     this.#allDestinations = allDestinations;
     this.#allOffers = allOffers;
@@ -135,47 +137,51 @@ export default class PointEditView extends AbstractStatefulView {
 
   #editCloseButtonHandler = (evt) => {
     evt.preventDefault();
-    this.#handleEditCloseButton();
+    this.#handleEditCloseButton(PointEditView.parseStateToPoint(this.#originalPoint));
   };
 
   #destinationChangeHandler = (evt) => {
     const targetDestination = evt.target.value;
     const newDestination = this.#allDestinations.find((item) => item.name === targetDestination);
+    const newDestinationId = newDestination ? newDestination.id : '';
     this.updateElement({
-      destination: newDestination.id,
+      destination: newDestinationId,
     });
 
   };
 
   #typeChangeHandler = (evt) => {
     const targetType = evt.target.value;
-    this.updateElement ({ type: targetType, offers: [] });
+    this.updateElement ({
+      type: targetType,
+      offers: [],
+    });
   };
 
   #priceChangeHandler = (evt) => {
     const newPrice = evt.target.value;
     this._setState({
-      basePrice: newPrice
+      basePrice: newPrice,
     });
   };
 
   #dateFromChangeHandler = ([userDate]) => {
     this._setState({
-      dateFrom: userDate
+      dateFrom: userDate,
     });
     this.#setDatepickers();
   };
 
   #dateToChangeHandler = ([userDate]) => {
     this._setState({
-      dateTo: userDate
+      dateTo: userDate,
     });
   };
 
   #offersChangeHandler = () => {
     const checkedOffers = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
     this._setState({
-      offers: checkedOffers.map((item) => item.dataset.offerId)
+      offers: checkedOffers.map((item) => item.dataset.offerId),
     });
   };
 

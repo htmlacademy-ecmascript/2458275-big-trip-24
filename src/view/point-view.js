@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {TimeFormatType} from '../utils/consts.js';
-import {humanizeEventDate, getFormattedEventDuration, getDestinationById, getOffersById} from '../utils/point.js';
+import {humanizePointDate, getFormattedPointDuration, getDestinationById, getOffersById} from '../utils/point.js';
 
 function createPointTemplate({point, allDestinations, allOffers}) {
   const { basePrice, dateFrom, dateTo, isFavorite, type, destination, offers } = point;
@@ -10,18 +10,18 @@ function createPointTemplate({point, allDestinations, allOffers}) {
 
   return `<li class="trip-events__item">
   <div class="event">
-      <time class="event__date" datetime="${humanizeEventDate(dateFrom, TimeFormatType.FULL_DATE)}">${humanizeEventDate(dateFrom, TimeFormatType.SHORT_DATE)}</time>
+      <time class="event__date" datetime="${humanizePointDate(dateFrom, TimeFormatType.FULL_DATE)}">${humanizePointDate(dateFrom, TimeFormatType.SHORT_DATE)}</time>
                 <div class="event__type">
                   <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
                 </div>
                 <h3 class="event__title">${type} ${chosenDestination.name}</h3>
                 <div class="event__schedule">
                   <p class="event__time">
-                    <time class="event__start-time" datetime="${dateFrom}">${humanizeEventDate(dateFrom, TimeFormatType.TIME)}</time>
+                    <time class="event__start-time" datetime="${dateFrom}">${humanizePointDate(dateFrom, TimeFormatType.TIME)}</time>
                     &mdash;
-                    <time class="event__end-time" datetime="${dateTo}">${humanizeEventDate(point.dateTo, TimeFormatType.TIME)}</time>
+                    <time class="event__end-time" datetime="${dateTo}">${humanizePointDate(point.dateTo, TimeFormatType.TIME)}</time>
                   </p>
-                  <p class="event__duration">${getFormattedEventDuration (dateFrom, dateTo)}</p>
+                  <p class="event__duration">${getFormattedPointDuration(dateFrom, dateTo)}</p>
                 </div>
                 <p class="event__price">
                   &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
@@ -48,7 +48,6 @@ function createPointTemplate({point, allDestinations, allOffers}) {
               </div>
             </li>`;
 }
-
 export default class pointView extends AbstractView {
   #point = null;
   #allDestinations = [];

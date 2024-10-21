@@ -1,6 +1,6 @@
-import {isEscapeKey} from '../utils/utils.js';
+import {isEscapeKey} from '../utils/common.js';
 import {render, remove, RenderPosition} from '../framework/render.js';
-import { UserAction, UpdateType, BLANK_POINT } from '../utils/consts.js';
+import {UserAction, UpdateType, BLANK_POINT} from '../utils/consts.js';
 import PointAddView from '../view/point-add-view.js';
 
 export default class NewPointPresenter {
@@ -8,17 +8,19 @@ export default class NewPointPresenter {
   #pointsListContainer = null;
   #handleDataChange = null;
   #handleDestroy = null;
+  #handleCancel = null;
 
   #pointAddComponent = null;
   #destinationsModel = null;
   #offersModel = null;
 
-  constructor({pointsListContainer, destinationsModel, offersModel, onDataChange, onDestroy}) {
+  constructor({pointsListContainer, destinationsModel, offersModel, onDataChange, onDestroy, onCancel}) {
     this.#pointsListContainer = pointsListContainer;
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
     this.#handleDataChange = onDataChange;
     this.#handleDestroy = onDestroy;
+    this.#handleCancel = onCancel;
   }
 
   init() {
@@ -35,7 +37,6 @@ export default class NewPointPresenter {
     });
 
     render(this.#pointAddComponent, this.#pointsListContainer, RenderPosition.AFTERBEGIN);
-
     document.addEventListener('keydown', this.#escKeyDownHandler);
   }
 
@@ -45,6 +46,7 @@ export default class NewPointPresenter {
     }
 
     this.#handleDestroy();
+    this.#handleCancel();
 
     remove(this.#pointAddComponent);
     this.#pointAddComponent = null;
@@ -74,7 +76,7 @@ export default class NewPointPresenter {
   #handleFormSubmit = (point) => {
     this.#handleDataChange(
       UserAction.ADD_POINT,
-      UpdateType.MINOR,
+      UpdateType.MAJOR,
       point,
     );
   };

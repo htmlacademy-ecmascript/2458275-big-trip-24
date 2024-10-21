@@ -4,7 +4,6 @@ import {getOffersByType, getDestinationById} from '../utils/point.js';
 import {createTypeTemplate, createDestinationsTemplate, createTimeTemplate, createPriceTemplate, createOffersTemplate, createDescriptionTemplate} from './common-templates-for-views.js';
 
 import flatpickr from 'flatpickr';
-
 import 'flatpickr/dist/flatpickr.min.css';
 
 
@@ -29,8 +28,8 @@ function createNewPointTemplate(point, allDestinations, allOffers) {
                         ${destinationsTemplate}
                         ${timeTemplate}
                         ${priceTemplate}
-<button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
-                  <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>Cancel</button>
+<button class="event__save-btn  btn  btn--blue" type="submit" ${isSaving ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
+                  <button class="event__reset-btn" type="reset" ${(isSaving || isDisabled) ? 'disabled' : ''}>Cancel</button>
                 </header>
                 <section class="event__details">
                       ${offersTemplate}
@@ -125,10 +124,10 @@ export default class PointAddView extends AbstractStatefulView {
   #destinationChangeHandler = (evt) => {
     const targetDestination = evt.target.value;
     const newDestination = this.#allDestinations.find((item) => item.name === targetDestination);
+    const newDestinationId = newDestination ? newDestination.id : '';
     this.updateElement({
-      destination: newDestination.id,
+      destination: newDestinationId,
     });
-
   };
 
   #typeChangeHandler = (evt) => {
