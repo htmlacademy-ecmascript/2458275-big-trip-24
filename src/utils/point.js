@@ -22,16 +22,14 @@ function getCurrentTripDestinations(points, destinations) {
 
 function getTripTotalPrice(points, offers) {
 
-  const currentTripOffers = points.map((point) => getOffersById(offers, point.type, point.offers));
-  const currentTripOffersPrices = currentTripOffers.map((offer) => offer.price);
-  const currentTripBacePrices = points.map((point) => point.basePrice);
-  const allPrices = [...currentTripOffersPrices, ...currentTripBacePrices];
+  const currentTripOffers = points.map((point) => getOffersById(offers, point.type, point.offers)).flat();
+  const currentTripOffersPricesSum = currentTripOffers.reduce((totalCost, offer) => totalCost + offer.price, 0);
 
-  let totalPrice = 0;
-  for (let i = 0; i < allPrices.length; i++) {
-    totalPrice += allPrices[i];
-  }
-  return totalPrice;
+  const currentTripBacePricesSum = points.reduce((totalCost, point) => totalCost + point.basePrice, 0);
+
+  const tripTotalPrice = currentTripOffersPricesSum + currentTripBacePricesSum;
+
+  return tripTotalPrice;
 }
 
 function humanizeEventDate(eventDate, format) {
